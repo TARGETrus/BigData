@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="hw3.BidsAnalyzerTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2018-01-24T15:00:00" hostname="EPRUPETW1405" time="0.0">
+  <properties/>
+  <testcase name="testCorrectMapperAndReducerOutput" classname="hw3.BidsAnalyzerTest" time="0.0"/>
+  <system-out><![CDATA[2018-01-24 18:00:00 DEBUG MapReduceDriver:233 - Starting map phase with mapper: hw3.BidsAnalyzerMapper@7c6fb5c6
+2018-01-24 18:00:00 DEBUG MapReduceDriver:248 - Starting reduce phase with reducer: hw3.BidsAnalyzerReducer@4dbb476d
+2018-01-24 18:00:00 DEBUG ReducePhaseRunner:67 - Reducing input ((zhongshan, 1,260), (zhongshan, 1,280))
+2018-01-24 18:00:00 DEBUG TestDriver:814 - Matched expected output (zhongshan, 2,540) at position 0
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

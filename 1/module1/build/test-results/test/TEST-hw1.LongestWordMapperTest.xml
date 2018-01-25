@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="hw1.LongestWordMapperTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2018-01-24T14:59:58" hostname="EPRUPETW1405" time="0.615">
+  <properties/>
+  <testcase name="testCorrectMapperOutput" classname="hw1.LongestWordMapperTest" time="0.615"/>
+  <system-out><![CDATA[2018-01-24 17:59:58 DEBUG MapDriverBase:306 - Mapping input (0,  KotOR universe KotOR smuggler, KotOR )
+2018-01-24 17:59:59 DEBUG TestDriver:814 - Matched expected output (smuggler,, 9) at position 0
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

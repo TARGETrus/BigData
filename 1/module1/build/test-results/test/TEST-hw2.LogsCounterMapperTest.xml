@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="hw2.LogsCounterMapperTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2018-01-24T14:59:59" hostname="EPRUPETW1405" time="0.08">
+  <properties/>
+  <testcase name="testCorrectMapperOutput" classname="hw2.LogsCounterMapperTest" time="0.08"/>
+  <system-out><![CDATA[2018-01-24 17:59:59 DEBUG MapDriverBase:306 - Mapping input (0, ip1 - - [24/Apr/2011:04:06:01 -0400] "GET /~strabal/grease/photo9/927-3.jpg HTTP/1.1" 200 40028 "-" "Mozilla/5.0 (compatible; YandexImages/3.0; +http://yandex.com/bots)")
+2018-01-24 17:59:59 DEBUG MapDriverBase:306 - Mapping input (0, ip1 - - [24/Apr/2011:04:10:19 -0400] "GET /~strabal/grease/photo1/97-13.jpg HTTP/1.1" 200 56928 "-" "Mozilla/5.0 (compatible; YandexImages/3.0; +http://yandex.com/bots)")
+2018-01-24 17:59:59 DEBUG TestDriver:814 - Matched expected output (ip1, 1.0,40028) at position 0
+2018-01-24 17:59:59 DEBUG TestDriver:814 - Matched expected output (ip1, 1.0,56928) at position 1
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

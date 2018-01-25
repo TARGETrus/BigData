@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="hw1.LongestWordReducerTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2018-01-24T14:59:59" hostname="EPRUPETW1405" time="0.084">
+  <properties/>
+  <testcase name="testCorrectReducerOutput" classname="hw1.LongestWordReducerTest" time="0.084"/>
+  <system-out><![CDATA[2018-01-24 17:59:59 DEBUG TestDriver:814 - Matched expected output (kokoko, 6) at position 0
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

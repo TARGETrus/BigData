@@ -1,0 +1,13 @@
+As you can see the above code, for the two objects we are comparing, 
+there are two corresponding byte arrays (b1 and b2), the starting positions 
+of the objects in the byte arrays, and the length of the bytes they occupy. 
+Please note that the byte arrays themselves represent other things and not 
+only the objects we are comparing. That is why the starting position and 
+length are also passed in as arguments. Since we want to sort ascendingly 
+by i then j, we first compare the bytes representing the i-th indexes and 
+if they are equal, then we compare the j-th indexes. You can also see that 
+we use the util method, readInt(byte[], start), inherited from 
+WritableComparator. This method simply converts the 4 consecutive bytes 
+beginning at start into a primitive int (the primitive int in Java is 4 bytes).
+ If the i-th indexes are equal, then we shift the starting point by 4, 
+ read in the j-th indexes and then compare them.

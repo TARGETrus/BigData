@@ -1,0 +1,52 @@
+i2018-01-24 17:59:58 DEBUG MapDriverBase:306 - Mapping input (0,  KotOR universe KotOR smuggler, KotOR )
+a2018-01-24 17:59:59 DEBUG TestDriver:814 - Matched expected output (smuggler,, 9) at position 0
+^2018-01-24 17:59:59 DEBUG TestDriver:814 - Matched expected output (kokoko, 6) at position 0
+p2018-01-24 17:59:59 DEBUG MapReduceDriver:233 - Starting map phase with mapper: hw1.LongestWordMapper@7ebe1347
+u2018-01-24 17:59:59 DEBUG MapReduceDriver:248 - Starting reduce phase with reducer: hw1.LongestWordReducer@2b28588e
+R2018-01-24 17:59:59 DEBUG ReducePhaseRunner:67 - Reducing input ((smuggler,, 9))
+a2018-01-24 17:59:59 DEBUG TestDriver:814 - Matched expected output (smuggler,, 9) at position 0
+b2018-01-24 17:59:59 DEBUG TestDriver:814 - Matched expected output (ip1, 3.0,9800) at position 0
+
+	Ï2018-01-24 17:59:59 DEBUG MapDriverBase:306 - Mapping input (0, ip1 - - [24/Apr/2011:04:06:01 -0400] "GET /~strabal/grease/photo9/927-3.jpg HTTP/1.1" 200 40028 "-" "Mozilla/5.0 (compatible; YandexImages/3.0; +http://yandex.com/bots)")
+
+	Ï2018-01-24 17:59:59 DEBUG MapDriverBase:306 - Mapping input (0, ip1 - - [24/Apr/2011:04:10:19 -0400] "GET /~strabal/grease/photo1/97-13.jpg HTTP/1.1" 200 56928 "-" "Mozilla/5.0 (compatible; YandexImages/3.0; +http://yandex.com/bots)")
+
+	c2018-01-24 17:59:59 DEBUG TestDriver:814 - Matched expected output (ip1, 1.0,40028) at position 0
+
+	c2018-01-24 17:59:59 DEBUG TestDriver:814 - Matched expected output (ip1, 1.0,56928) at position 1
+h2018-01-24 17:59:59 DEBUG TestDriver:814 - Matched expected output (ip1, 3266.6667,9800) at position 0
+p2018-01-24 17:59:59 DEBUG MapReduceDriver:233 - Starting map phase with mapper: hw2.LogsCounterMapper@7325d2b2
+u2018-01-24 17:59:59 DEBUG MapReduceDriver:248 - Starting reduce phase with reducer: hw2.LogsCounterReducer@7491f5ce
+u2018-01-24 17:59:59 DEBUG ReducePhaseRunner:67 - Reducing input ((ip1, 1.0,2155), (ip1, 1.0,4256), (ip1, 1.0,3389))
+h2018-01-24 17:59:59 DEBUG TestDriver:814 - Matched expected output (ip1, 3266.6667,9800) at position 0
+ê2018-01-24 17:59:59 DEBUG MapDriverBase:306 - Mapping input (0, 20131019025500549	1	CAD06D3WCtf	Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1)	113.117.187.*	216	234	2	33235ca84c5fee9254e6512a41b3ad5e	8bbb5a81cc3d680dd0c27cf4886ddeae	null	3061584349	728	90	OtherView	Na	5	7330	277	48	null	2259	10057,13800,13496,10079,10076,10075,10093,10129,10024,10006,10110,13776,10146,10120,10115,10063)
+Ç2018-01-24 17:59:59 INFO  deprecation:1173 - mapred.cache.localFiles is deprecated. Instead, use mapreduce.job.cache.local.files
+¯2018-01-24 17:59:59 DEBUG MutableMetricsFactory:42 - field org.apache.hadoop.metrics2.lib.MutableRate org.apache.hadoop.security.UserGroupInformation$UgiMetrics.loginSuccess with annotation @org.apache.hadoop.metrics2.annotation.Metric(sampleName=Ops, always=false, about=, type=DEFAULT, value=[Rate of successful kerberos logins and latency (milliseconds)], valueName=Time)
+Ù2018-01-24 17:59:59 DEBUG MutableMetricsFactory:42 - field org.apache.hadoop.metrics2.lib.MutableRate org.apache.hadoop.security.UserGroupInformation$UgiMetrics.loginFailure with annotation @org.apache.hadoop.metrics2.annotation.Metric(sampleName=Ops, always=false, about=, type=DEFAULT, value=[Rate of failed kerberos logins and latency (milliseconds)], valueName=Time)
+¡2018-01-24 17:59:59 DEBUG MutableMetricsFactory:42 - field org.apache.hadoop.metrics2.lib.MutableRate org.apache.hadoop.security.UserGroupInformation$UgiMetrics.getGroups with annotation @org.apache.hadoop.metrics2.annotation.Metric(sampleName=Ops, always=false, about=, type=DEFAULT, value=[GetGroups], valueName=Time)
+^2018-01-24 17:59:59 DEBUG MetricsSystemImpl:232 - UgiMetrics, User and group related metrics
+D2018-01-24 17:59:59 DEBUG Groups:301 -  Creating new Groups object
+j2018-01-24 17:59:59 DEBUG NativeCodeLoader:46 - Trying to load the custom-built native-hadoop library...
+ô2018-01-24 17:59:59 DEBUG NativeCodeLoader:55 - Failed to load native-hadoop with error: java.lang.UnsatisfiedLinkError: no hadoop in java.library.path
+Í2018-01-24 17:59:59 DEBUG NativeCodeLoader:56 - java.library.path=C:\oracle\Java\jdk1.8.0_161\bin;C:\WINDOWS\Sun\Java\bin;C:\WINDOWS\system32;C:\WINDOWS;C:\ProgramData\Oracle\Java\javapath;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\Program Files\TortoiseSVN\bin;C:\Program Files\PuTTY\;C:\Program Files\Git\cmd;C:\Users\Ivan_Ivanov1\AppData\Local\Microsoft\WindowsApps;C:\oracle\Java\jdk1.8.0_161\bin;D:\BD_Course\HadoopBins\;;.
+ó2018-01-24 17:59:59 WARN  NativeCodeLoader:62 - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+P2018-01-24 17:59:59 DEBUG PerformanceAdvisory:41 - Falling back to shell based
+ê2018-01-24 17:59:59 DEBUG JniBasedUnixGroupsMappingWithFallback:45 - Group mapping impl=org.apache.hadoop.security.ShellBasedUnixGroupsMapping
+¶2018-01-24 17:59:59 DEBUG Groups:112 - Group mapping impl=org.apache.hadoop.security.JniBasedUnixGroupsMappingWithFallback; cacheTimeout=300000; warningDeltaMs=5000
+C2018-01-24 17:59:59 DEBUG UserGroupInformation:221 - hadoop login
+J2018-01-24 17:59:59 DEBUG UserGroupInformation:156 - hadoop login commit
+e2018-01-24 17:59:59 DEBUG UserGroupInformation:186 - using local user:NTUserPrincipal: Ivan_Ivanov1
+y2018-01-24 17:59:59 DEBUG UserGroupInformation:192 - Using user: "NTUserPrincipal: Ivan_Ivanov1" with name Ivan_Ivanov1
+Q2018-01-24 17:59:59 DEBUG UserGroupInformation:202 - User entry: "Ivan_Ivanov1"
+_2018-01-24 17:59:59 DEBUG UserGroupInformation:826 - UGI loginUser:Ivan_Ivanov1 (auth:SIMPLE)
+±2018-01-24 17:59:59 DEBUG MapDriverBase:306 - Mapping input (0, 2e72d1bd7185fb76d69c852c57436d37	20131019025500549	1	CAD06D3WCtf	Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1)	113.117.187.*	216	234	2	33235ca84c5fee9254e6512a41b3ad5e	8bbb5a81cc3d680dd0c27cf4886ddeae	null	3061584349	728	90	OtherView	Na	5	7330	277	48	null	2259	10057,13800,13496,10079,10076,10075,10093,10129,10024,10006,10110,13776,10146,10120,10115,10063)
+≤2018-01-24 17:59:59 DEBUG MapDriverBase:306 - Mapping input (0, 2e72d1bd7185fb76d69c852c57436d37	20131019025500549	1	CAD06D3WCtf	Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1)	113.117.187.*	216	234	2	33235ca84c5fee9254e6512a41b3ad5e	8bbb5a81cc3d680dd0c27cf4886ddeae	null	3061584349	728	90	OtherView	Na	5	7330	277$	48	null	2259	10057,13800,13496,10079,10076,10075,10093,10129,10024,10006,10110,13776,10146,10120,10115,10063)
+±2018-01-24 18:00:00 DEBUG MapDriverBase:306 - Mapping input (0, 2e72d1bd7185fb76d69c852c57436d37	20131019025500549	1	CAD06D3WCtf	Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1)	113.117.187.*	216	999	2	33235ca84c5fee9254e6512a41b3ad5e	8bbb5a81cc3d680dd0c27cf4886ddeae	null	3061584349	728	90	OtherView	Na	5	7330	277	48	null	2259	10057,13800,13496,10079,10076,10075,10093,10129,10024,10006,10110,13776,10146,10120,10115,10063)
+±2018-01-24 18:00:00 DEBUG MapDriverBase:306 - Mapping input (0, 2e72d1bd7185fb76d69c852c57436d37	20131019025500549	1	CAD06D3WCtf	Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1)	113.117.187.*	216	234	2	33235ca84c5fee9254e6512a41b3ad5e	8bbb5a81cc3d680dd0c27cf4886ddeae	null	3061584349	728	90	OtherView	Na	5	7330	240	48	null	2259	10057,13800,13496,10079,10076,10075,10093,10129,10024,10006,10110,13776,10146,10120,10115,10063)
+±2018-01-24 18:00:00 DEBUG MapDriverBase:306 - Mapping input (0, 2e72d1bd7185fb76d69c852c57436d37	20131019025500549	1	CAD06D3WCtf	Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1)	113.117.187.*	216	234	2	33235ca84c5fee9254e6512a41b3ad5e	8bbb5a81cc3d680dd0c27cf4886ddeae	null	3061584349	728	90	OtherView	Na	5	7330	277	48	null	2259	10057,13800,13496,10079,10076,10075,10093,10129,10024,10006,10110,13776,10146,10120,10115,10063)
+e2018-01-24 18:00:00 DEBUG TestDriver:814 - Matched expected output (zhongshan, 1,277) at position 0
+f2018-01-24 18:00:00 DEBUG TestDriver:814 - Matched expected output (zhongshan, 5,1030) at position 0
+q2018-01-24 18:00:00 DEBUG MapReduceDriver:233 - Starting map phase with mapper: hw3.BidsAnalyzerMapper@7c6fb5c6
+v2018-01-24 18:00:00 DEBUG MapReduceDriver:248 - Starting reduce phase with reducer: hw3.BidsAnalyzerReducer@4dbb476d
+j2018-01-24 18:00:00 DEBUG ReducePhaseRunner:67 - Reducing input ((zhongshan, 1,260), (zhongshan, 1,280))
+e2018-01-24 18:00:00 DEBUG TestDriver:814 - Matched expected output (zhongshan, 2,540) at position 0

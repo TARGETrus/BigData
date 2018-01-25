@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="hw2.LogsCounterTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2018-01-24T14:59:59" hostname="EPRUPETW1405" time="0.016">
+  <properties/>
+  <testcase name="testCorrectMapperAndReducerOutput" classname="hw2.LogsCounterTest" time="0.016"/>
+  <system-out><![CDATA[2018-01-24 17:59:59 DEBUG MapReduceDriver:233 - Starting map phase with mapper: hw2.LogsCounterMapper@7325d2b2
+2018-01-24 17:59:59 DEBUG MapReduceDriver:248 - Starting reduce phase with reducer: hw2.LogsCounterReducer@7491f5ce
+2018-01-24 17:59:59 DEBUG ReducePhaseRunner:67 - Reducing input ((ip1, 1.0,2155), (ip1, 1.0,4256), (ip1, 1.0,3389))
+2018-01-24 17:59:59 DEBUG TestDriver:814 - Matched expected output (ip1, 3266.6667,9800) at position 0
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

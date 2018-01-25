@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="x-ua-compatible" content="IE=edge"/>
+<title>Test results - Class hw3.BidsAnalyzerMapperTest</title>
+<link href="../css/base-style.css" rel="stylesheet" type="text/css"/>
+<link href="../css/style.css" rel="stylesheet" type="text/css"/>
+<script src="../js/report.js" type="text/javascript"></script>
+</head>
+<body>
+<div id="content">
+<h1>Class hw3.BidsAnalyzerMapperTest</h1>
+<div class="breadcrumbs">
+<a href="../index.html">all</a> &gt; 
+<a href="../packages/hw3.html">hw3</a> &gt; BidsAnalyzerMapperTest</div>
+<div id="summary">
+<table>
+<tr>
+<td>
+<div class="summaryGroup">
+<table>
+<tr>
+<td>
+<div class="infoBox" id="tests">
+<div class="counter">6</div>
+<p>tests</p>
+</div>
+</td>
+<td>
+<div class="infoBox" id="failures">
+<div class="counter">0</div>
+<p>failures</p>
+</div>
+</td>
+<td>
+<div class="infoBox" id="ignored">
+<div class="counter">0</div>
+<p>ignored</p>
+</div>
+</td>
+<td>
+<div class="infoBox" id="duration">
+<div class="counter">0.531s</div>
+<p>duration</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</td>
+<td>
+<div class="infoBox success" id="successRate">
+<div class="percent">100%</div>
+<p>successful</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div id="tabs">
+<ul class="tabLinks">
+<li>
+<a href="#tab0">Tests</a>
+</li>
+<li>
+<a href="#tab1">Standard output</a>
+</li>
+</ul>
+<div id="tab0" class="tab">
+<h2>Tests</h2>
+<table>
+<thead>
+<tr>
+<th>Test</th>
+<th>Duration</th>
+<th>Result</th>
+</tr>
+</thead>
+<tr>
+<td class="success">testCorrectMapperOutput</td>
+<td>0.015s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">testMapperNoOutputIfInvalidChunksCount</td>
+<td>0.476s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">testMapperNoOutputIfInvalidPrice</td>
+<td>0.015s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">testMapperNoOutputIfSmallPrice</td>
+<td>0.016s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">testNoMapperOutputWithoutCache</td>
+<td>0.009s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">testNoMapperOutputWithoutCityName</td>
+<td>0s</td>
+<td class="success">passed</td>
+</tr>
+</table>
+</div>
+<div id="tab1" class="tab">
+<h2>Standard output</h2>
+<span class="code">
+<pre>2018-01-24 17:59:59 DEBUG MapDriverBase:306 - Mapping input (0, 20131019025500549	1	CAD06D3WCtf	Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1)	113.117.187.*	216	234	2	33235ca84c5fee9254e6512a41b3ad5e	8bbb5a81cc3d680dd0c27cf4886ddeae	null	3061584349	728	90	OtherView	Na	5	7330	277	48	null	2259	10057,13800,13496,10079,10076,10075,10093,10129,10024,10006,10110,13776,10146,10120,10115,10063)
+2018-01-24 17:59:59 INFO  deprecation:1173 - mapred.cache.localFiles is deprecated. Instead, use mapreduce.job.cache.local.files
+2018-01-24 17:59:59 DEBUG MutableMetricsFactory:42 - field org.apache.hadoop.metrics2.lib.MutableRate org.apache.hadoop.security.UserGroupInformation$UgiMetrics.loginSuccess with annotation @org.apache.hadoop.metrics2.annotation.Metric(sampleName=Ops, always=false, about=, type=DEFAULT, value=[Rate of successful kerberos logins and latency (milliseconds)], valueName=Time)
+2018-01-24 17:59:59 DEBUG MutableMetricsFactory:42 - field org.apache.hadoop.metrics2.lib.MutableRate org.apache.hadoop.security.UserGroupInformation$UgiMetrics.loginFailure with annotation @org.apache.hadoop.metrics2.annotation.Metric(sampleName=Ops, always=false, about=, type=DEFAULT, value=[Rate of failed kerberos logins and latency (milliseconds)], valueName=Time)
+2018-01-24 17:59:59 DEBUG MutableMetricsFactory:42 - field org.apache.hadoop.metrics2.lib.MutableRate org.apache.hadoop.security.UserGroupInformation$UgiMetrics.getGroups with annotation @org.apache.hadoop.metrics2.annotation.Metric(sampleName=Ops, always=false, about=, type=DEFAULT, value=[GetGroups], valueName=Time)
+2018-01-24 17:59:59 DEBUG MetricsSystemImpl:232 - UgiMetrics, User and group related metrics
+2018-01-24 17:59:59 DEBUG Groups:301 -  Creating new Groups object
+2018-01-24 17:59:59 DEBUG NativeCodeLoader:46 - Trying to load the custom-built native-hadoop library...
+2018-01-24 17:59:59 DEBUG NativeCodeLoader:55 - Failed to load native-hadoop with error: java.lang.UnsatisfiedLinkError: no hadoop in java.library.path
+2018-01-24 17:59:59 DEBUG NativeCodeLoader:56 - java.library.path=C:\oracle\Java\jdk1.8.0_161\bin;C:\WINDOWS\Sun\Java\bin;C:\WINDOWS\system32;C:\WINDOWS;C:\ProgramData\Oracle\Java\javapath;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\Program Files\TortoiseSVN\bin;C:\Program Files\PuTTY\;C:\Program Files\Git\cmd;C:\Users\Ivan_Ivanov1\AppData\Local\Microsoft\WindowsApps;C:\oracle\Java\jdk1.8.0_161\bin;D:\BD_Course\HadoopBins\;;.
+2018-01-24 17:59:59 WARN  NativeCodeLoader:62 - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+2018-01-24 17:59:59 DEBUG PerformanceAdvisory:41 - Falling back to shell based
+2018-01-24 17:59:59 DEBUG JniBasedUnixGroupsMappingWithFallback:45 - Group mapping impl=org.apache.hadoop.security.ShellBasedUnixGroupsMapping
+2018-01-24 17:59:59 DEBUG Groups:112 - Group mapping impl=org.apache.hadoop.security.JniBasedUnixGroupsMappingWithFallback; cacheTimeout=300000; warningDeltaMs=5000
+2018-01-24 17:59:59 DEBUG UserGroupInformation:221 - hadoop login
+2018-01-24 17:59:59 DEBUG UserGroupInformation:156 - hadoop login commit
+2018-01-24 17:59:59 DEBUG UserGroupInformation:186 - using local user:NTUserPrincipal: Ivan_Ivanov1
+2018-01-24 17:59:59 DEBUG UserGroupInformation:192 - Using user: &quot;NTUserPrincipal: Ivan_Ivanov1&quot; with name Ivan_Ivanov1
+2018-01-24 17:59:59 DEBUG UserGroupInformation:202 - User entry: &quot;Ivan_Ivanov1&quot;
+2018-01-24 17:59:59 DEBUG UserGroupInformation:826 - UGI loginUser:Ivan_Ivanov1 (auth:SIMPLE)
+2018-01-24 17:59:59 DEBUG MapDriverBase:306 - Mapping input (0, 2e72d1bd7185fb76d69c852c57436d37	20131019025500549	1	CAD06D3WCtf	Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1)	113.117.187.*	216	234	2	33235ca84c5fee9254e6512a41b3ad5e	8bbb5a81cc3d680dd0c27cf4886ddeae	null	3061584349	728	90	OtherView	Na	5	7330	277	48	null	2259	10057,13800,13496,10079,10076,10075,10093,10129,10024,10006,10110,13776,10146,10120,10115,10063)
+2018-01-24 17:59:59 DEBUG MapDriverBase:306 - Mapping input (0, 2e72d1bd7185fb76d69c852c57436d37	20131019025500549	1	CAD06D3WCtf	Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1)	113.117.187.*	216	234	2	33235ca84c5fee9254e6512a41b3ad5e	8bbb5a81cc3d680dd0c27cf4886ddeae	null	3061584349	728	90	OtherView	Na	5	7330	277$	48	null	2259	10057,13800,13496,10079,10076,10075,10093,10129,10024,10006,10110,13776,10146,10120,10115,10063)
+2018-01-24 18:00:00 DEBUG MapDriverBase:306 - Mapping input (0, 2e72d1bd7185fb76d69c852c57436d37	20131019025500549	1	CAD06D3WCtf	Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1)	113.117.187.*	216	999	2	33235ca84c5fee9254e6512a41b3ad5e	8bbb5a81cc3d680dd0c27cf4886ddeae	null	3061584349	728	90	OtherView	Na	5	7330	277	48	null	2259	10057,13800,13496,10079,10076,10075,10093,10129,10024,10006,10110,13776,10146,10120,10115,10063)
+2018-01-24 18:00:00 DEBUG MapDriverBase:306 - Mapping input (0, 2e72d1bd7185fb76d69c852c57436d37	20131019025500549	1	CAD06D3WCtf	Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1)	113.117.187.*	216	234	2	33235ca84c5fee9254e6512a41b3ad5e	8bbb5a81cc3d680dd0c27cf4886ddeae	null	3061584349	728	90	OtherView	Na	5	7330	240	48	null	2259	10057,13800,13496,10079,10076,10075,10093,10129,10024,10006,10110,13776,10146,10120,10115,10063)
+2018-01-24 18:00:00 DEBUG MapDriverBase:306 - Mapping input (0, 2e72d1bd7185fb76d69c852c57436d37	20131019025500549	1	CAD06D3WCtf	Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1)	113.117.187.*	216	234	2	33235ca84c5fee9254e6512a41b3ad5e	8bbb5a81cc3d680dd0c27cf4886ddeae	null	3061584349	728	90	OtherView	Na	5	7330	277	48	null	2259	10057,13800,13496,10079,10076,10075,10093,10129,10024,10006,10110,13776,10146,10120,10115,10063)
+2018-01-24 18:00:00 DEBUG TestDriver:814 - Matched expected output (zhongshan, 1,277) at position 0
+</pre>
+</span>
+</div>
+</div>
+<div id="footer">
+<p>
+<div>
+<label class="hidden" id="label-for-line-wrapping-toggle" for="line-wrapping-toggle">Wrap lines
+<input id="line-wrapping-toggle" type="checkbox" autocomplete="off"/>
+</label>
+</div>Generated by 
+<a href="http://www.gradle.org">Gradle 3.5-rc-2</a> at Jan 24, 2018 6:00:00 PM</p>
+</div>
+</div>
+</body>
+</html>

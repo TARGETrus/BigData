@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="hw2.LogsCounterCombinerTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2018-01-24T14:59:59" hostname="EPRUPETW1405" time="0.022">
+  <properties/>
+  <testcase name="testCorrectReducerOutput" classname="hw2.LogsCounterCombinerTest" time="0.022"/>
+  <system-out><![CDATA[2018-01-24 17:59:59 DEBUG TestDriver:814 - Matched expected output (ip1, 3.0,9800) at position 0
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
