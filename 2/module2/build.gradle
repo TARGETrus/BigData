@@ -1,0 +1,33 @@
+group 'com.epam.training'
+version '1.0'
+
+
+apply plugin: 'java'
+apply plugin: 'idea'
+apply plugin: 'eclipse'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+    // Required by hive-exec:
+    maven {
+        url "http://conjars.org/repo/"
+    }
+}
+
+dependencies {
+    compile group: 'org.apache.hadoop', name: 'hadoop-common', version: '2.7.1'
+    compile group: 'org.apache.hive', name: 'hive-exec', version: '1.2.0'
+    compile group: 'eu.bitwalker', name: 'UserAgentUtils', version: '1.20'
+}
+
+dependencies {
+    testCompile group: 'junit', name: 'junit', version: '4.10'
+}
+
+ext.hadoopVersion = "2.7.1"
+
+jar {
+    from { configurations.compile.filter({it.name == "UserAgentUtils-1.20.jar"}).collect { it.isDirectory() ? it : zipTree(it) } }
+}
