@@ -15,10 +15,10 @@ public class UserAgentParserTest {
     private UserAgentParser parser;
 
     // Tests - related variables.
-    private static final String DEVICE = "Device";
-    private static final String OS = "OS";
+    private static final String DEVICE  = "Device";
+    private static final String OS      = "OS";
     private static final String BROWSER = "Browser";
-    private static final String UA = "UA";
+    private static final String UA      = "UA";
 
     @Before
     public void setUp() {

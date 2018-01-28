@@ -19,8 +19,8 @@ FROM (
 	SELECT airport, count(*) AS cnt
 	FROM flights f 
 	LEFT JOIN airports
-		ON (country = 'USA' AND iata = origin)
-	WHERE f.month >5 and f.month <9
+		ON (country = 'USA' AND iata = f.origin)
+	WHERE f.month > 5 and f.month < 9
 	GROUP BY airport
 	UNION
 	SELECT airport, count(*) AS cnt
@@ -55,3 +55,19 @@ GROUP BY c.description
 HAVING cnt > 1
 ORDER BY cnt DESC;
 
+-- Find most popular device, browser, OS for each city.
+SELECT c.city_name, r.key, r.value
+FROM (
+	SELECT b.city_id, u.key, u.value
+  	FROM bids b
+	LATERAL VIEW explode(user_agent_to_map(b.user_agent)) u AS key, value
+  	WHERE key != 'UA'
+) r
+LEFT JOIN cities c
+	ON (r.city_id = c.city_id)
+;
+
+
+!connect jdbc:hive2://
+CREATE FUNCTION user_agent_to_map AS 'parsers.UserAgentParser' USING JAR 'hdfs:///user/maria_dev/module2-1.0.jar';
+DROP FUNCTION user_agent_to_map;

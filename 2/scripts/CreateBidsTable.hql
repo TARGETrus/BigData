@@ -1,31 +1,30 @@
-CREATE TABLE IF NOT EXISTS bids_i
+CREATE TABLE IF NOT EXISTS bids
 (
 	bid_id STRING,
-	timestmp TIMESTAMP,
+	timestmp STRING,
     log_type INT,
-    i_pin_you_id BIGINT,
+    i_pin_you_id STRING,
     user_agent STRING,
     ip STRING,
     region_id INT,
     city_id INT,
-    ad_exchange INT,
+    ad_exchange STRING,
     domain STRING,
     url STRING,
     anonymous_url STRING,
-    ad_slot_id BIGINT,
+    ad_slot_id STRING,
 	ad_slot_width INT,
 	ad_slot_height INT,
 	ad_slot_visibility STRING,
 	ad_slot_format STRING,
-	ad_slot_floor_price INT,
-	creative_id STRING,
-	bidding_price INT,
-	paying_price INT,
+	ad_slot_floor_price BIGINT,
+	creative_id INT,
+	bidding_price BIGINT,
+	paying_price BIGINT,
 	landing_page_url STRING,
 	advertiser_id INT,
-	user_profile_ids STRING
+	user_profile_ids array<STRING>
 )
-COMMENT 'Intermediate external teable for bids data'
-PARTITIONED BY (year INT, month INT)
-CLUSTERED BY (unique_carrier) INTO 3 BUCKETS
+COMMENT 'Data about bids'
+CLUSTERED BY (bid_id) INTO 4 BUCKETS
 STORED AS ORC;

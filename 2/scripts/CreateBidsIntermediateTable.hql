@@ -2,31 +2,32 @@ CREATE EXTERNAL TABLE IF NOT EXISTS bids_i
 (
 	bid_id STRING,
 	timestmp STRING,
-    log_type STRING,
+    log_type INT,
     i_pin_you_id STRING,
     user_agent STRING,
     ip STRING,
-    region_id STRING,
-    city_id STRING,
+    region_id INT,
+    city_id INT,
     ad_exchange STRING,
     domain STRING,
     url STRING,
     anonymous_url STRING,
     ad_slot_id STRING,
-	ad_slot_width STRING,
-	ad_slot_height STRING,
+	ad_slot_width INT,
+	ad_slot_height INT,
 	ad_slot_visibility STRING,
 	ad_slot_format STRING,
-	ad_slot_floor_price STRING,
-	creative_id STRING,
-	bidding_price STRING,
-	paying_price STRING,
+	ad_slot_floor_price BIGINT,
+	creative_id INT,
+	bidding_price BIGINT,
+	paying_price BIGINT,
 	landing_page_url STRING,
-	advertiser_id STRING,
-	user_profile_ids STRING
+	advertiser_id INT,
+	user_profile_ids array<STRING>
 )
 COMMENT 'Intermediate external teable for bids data'
 ROW FORMAT DELIMITED
-FIELDS TERMINATED BY ' '
+FIELDS TERMINATED BY '\t'
+COLLECTION ITEMS TERMINATED BY ','
 STORED AS TEXTFILE
 LOCATION '/user/maria_dev/input/hw3/';

@@ -15,7 +15,7 @@ import java.util.Map;
 @UDFType(deterministic = false)
 public class UserAgentParser extends UDF {
 
-    public Map<String, String> evaluate(final String userAgentString) {
+    public Map<String, String> evaluate(String userAgentString) {
 
         Map<String, String> userAgentParsed = new HashMap<>();
 
