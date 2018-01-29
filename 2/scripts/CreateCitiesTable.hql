@@ -8,3 +8,4 @@ ROW FORMAT DELIMITED
 FIELDS TERMINATED BY '\t'
 STORED AS TEXTFILE
 LOCATION '/user/maria_dev/input/hw3_cache/'
+;
