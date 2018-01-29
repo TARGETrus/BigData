@@ -1,7 +1,9 @@
 -- Total number of flights per carrier in 2007:
-SELECT unique_carrier, count(*)
-FROM flights
-GROUP BY unique_carrier;
+SELECT c.description, count(*) cnt
+FROM flights f
+LEFT JOIN carriers c
+	ON (c.code = f.unique_carrier)
+GROUP BY c.description;
 
 -- Total number of flights served in Jun 2007 by NYC (all airports):
 SELECT count(*) AS cnt
