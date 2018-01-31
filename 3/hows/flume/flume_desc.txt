@@ -1,0 +1,14 @@
+Source:
+Sopooling provides much more reliability, but we can't use it in this case - it supports only immutable files.
+Exec source can be used with tail -F [file] command, so we can read constantly updated file, but it
+can lead to data consistency issues - if channel fills up, we lose data without knowing about it.
+So our option here is Taildir - this source is reliable and will not miss data in case of agent or it's 
+components restart or fail.
+
+Channel:
+In-memory channel. Our data flow is not big, so we can store it in memory to provide additional speed,
+however, in case of channel drop or overflow we will lose un-sinked data.
+
+Sink:
+Task requires sinking output to HDFS, so we simply using HDFS Sink.
+Timestamps are used from message's headers to generate neat file structure.

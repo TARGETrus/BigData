@@ -1,0 +1,1 @@
+stationId, date, tmin, tmax, snow, snwd, prcp

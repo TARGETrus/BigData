@@ -1,0 +1,28 @@
+Selected  mappers count:
+Whe have 12 files to parse, on real cluster we, most likely, should use 12 mappers (one for each input file).
+However, on local instance optimal speed provided by 4 mappers.
+On local environment  mappers seems to be optimal.
+to get optimal processing speed.
+- tested on 1 mapper, whole process took ~55 minutes (see screen shots).
+- tested on 4 mappers, execution time reduced significantly, down to ~20 minutes (see screen shots, add +10 mins, staging table was empty), ~30 min total,
+  but it takes lots of additional CPU and Memory resources overhead.
+- tested on 12 mappers, execution time ~55 minutes (see screen shots).
+  same as 4 mappers, further increase in CPU an Memory overhead.
+
+sqoop command description:
+--connect - specified mysql DB address and target table.
+--connection-manager - required for staging support, provides driver, etc.
+--table - target table.
+--staging-table - table sqoop writes into. 
+  Staging table must share exact same definition as target table,
+  used to prevent data corruption if sqoop export command fails in the middle of the execution.
+  Loaded data moved to target table right after sqoop job is completed.
+--clear-staging-table - specify this property to enusre staging table truncated before fresh data load.
+--export-dir - directory with input data.
+--options-file - file with parameters (credentials in this case).
+  One line = one parameter OR value, not both.
+--num-mappers - simply number of mappers.
+--input-fields-terminated-by - input values delimiter char.
+
+Loads data from files in pointed directory, writes them into staging table using MR tasks, when done,
+migrates data into target table.

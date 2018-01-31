@@ -34,6 +34,19 @@ FROM (
 ) ports
 GROUP BY airport
 ORDER BY summ DESC LIMIT 5;
+-- V.2
+SELECT aps.airport AS airport, count(*) AS workload
+FROM (SELECT airlines.dest AS airport, airlines.month FROM airlines
+	UNION ALL
+	SELECT airlines.origin AS airport, airlines.month FROM airlines) aps, airports
+WHERE 
+	(aps.airport = airports.iata) 
+	AND aps.month > 5 
+	AND aps.month < 9
+	AND airports.country = 'USA'
+GROUP BY aps.airport, airports.airport
+ORDER BY workload DESC
+LIMIT 5;
 
 -- Find the carrier who served the biggest number of flights.
 -- LEFT SEMI JOIN can be used to boost performance. However, LEFT JOIN is used to provide improved readability.
@@ -43,6 +56,13 @@ LEFT JOIN carriers c
 	ON (c.code = f.unique_carrier)
 GROUP BY c.description
 ORDER BY cnt DESC LIMIT 1;
+-- V.2
+SELECT flights.unique_carrier, carriers.description, count(*) AS cnt
+FROM flights, carriers
+WHERE (flights.unique_carrier = carriers.code)
+GROUP BY flights.unique_carrier, carriers.description
+ORDER BY cnt DESC
+LIMIT 1;
 
 -- Find all carriers who canceled more than 1 flights during 2007, order them from biggest to lowest by number 
 -- of canceled flights and list in each record all departure cities where cancellation happened.

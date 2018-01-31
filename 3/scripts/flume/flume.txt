@@ -1,0 +1,12 @@
+1. Goto ~/ folder.
+2. create folder flume_meta
+3. create folder flume_input
+4. copy linux_messages_3000lines.txt to flume_input.
+5. Go to flume-server/bin folder.
+cd /usr/hdp/current/flume-server/bin/
+6. Run the following command:
+flume-ng agent --conf conf --conf-file ~/flume_messages.conf --name messages_agent -Dflume.root.logger=INFO, console
+7. Start populating file:
+cat linux_messages_3000lines.txt | while read line ; do echo "$line" ; sleep 0.2 ; done > output.txt
+8. read results (example command, replace with your date/time):
+hdfs dfs -cat flume_output/18-01-25/1300/message.1516886359208.tmp
