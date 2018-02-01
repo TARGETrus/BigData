@@ -1,6 +1,6 @@
 Selected  mappers count:
 Whe have 12 files to parse, on real cluster we, most likely, should use 12 mappers (one for each input file).
-However, on local instance optimal speed provided by 4 mappers.
+However, on local instance optimal speed provided by 4 mappers (4 CPU cores).
 On local environment  mappers seems to be optimal.
 to get optimal processing speed.
 - tested on 1 mapper, whole process took ~55 minutes (see screen shots).
