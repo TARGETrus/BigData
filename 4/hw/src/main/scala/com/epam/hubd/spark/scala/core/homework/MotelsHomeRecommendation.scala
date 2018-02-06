@@ -1,6 +1,6 @@
 package com.epam.hubd.spark.scala.core.homework
 
-import com.epam.hubd.spark.scala.core.homework.domain.{BidError, BidItem, EnrichedItem}
+import com.epam.hubd.spark.scala.core.homework.domain.{BidError, BidItem, EnrichedItem, MotelItem}
 import org.apache.spark.rdd.RDD
 import org.apache.spark.{SparkConf, SparkContext}
 
@@ -63,7 +63,7 @@ object MotelsHomeRecommendation {
       * Load motels data.
       * Hint: You will need the motels name for enrichment and you will use the id for join
       */
-    val motels: RDD[(String, String)] = getMotels(sc, motelsPath)
+    val motels: RDD[MotelItem] = getMotels(sc, motelsPath)
 
     /**
       * Task5:
@@ -83,7 +83,7 @@ object MotelsHomeRecommendation {
     * @return rdd with list of lines.
     */
   def getRawBids(sc: SparkContext, bidsPath: String): RDD[List[String]] = {
-    sc.textFile(bidsPath).map(line => line.split(",").toList)
+    sc.textFile(bidsPath).map(line => line.split(Constants.DELIMITER).toList)
   }
 
   /**
@@ -97,7 +97,7 @@ object MotelsHomeRecommendation {
       .filter(line => line(2).contains("ERROR_"))
       .map(line => (BidError(line(1), line(2)), 1))
       .reduceByKey((a, b) => a + b)
-      .map(v => v._1 + "," + v._2)
+      .map(v => v._1 + Constants.DELIMITER + v._2)
   }
 
   /**
@@ -111,7 +111,7 @@ object MotelsHomeRecommendation {
     sc
       .textFile(exchangeRatesPath)
       .map(line => {
-        val splitted = line.split(",")
+        val splitted = line.split(Constants.DELIMITER)
         (splitted(0), splitted(3).toDouble)
       })
       .collect()
@@ -154,12 +154,12 @@ object MotelsHomeRecommendation {
     * @param motelsPath path to file with motels data.
     * @return rdd with motels info.
     */
-  def getMotels(sc:SparkContext, motelsPath: String): RDD[(String, String)] = {
+  def getMotels(sc:SparkContext, motelsPath: String): RDD[MotelItem] = {
     sc
       .textFile(motelsPath)
       .map(line => {
-        val splitted = line.split(",")
-        (splitted(0), splitted(1))
+        val splitted = line.split(Constants.DELIMITER)
+        MotelItem(splitted(0), splitted(1))
       })
   }
 
@@ -170,14 +170,20 @@ object MotelsHomeRecommendation {
     * @param motels rdd with filled motels data.
     * @return rdd with filled EnrichedItems.
     */
-  def getEnriched(bids: RDD[BidItem], motels: RDD[(String, String)]): RDD[EnrichedItem] = {
+  def getEnriched(bids: RDD[BidItem], motels: RDD[MotelItem]): RDD[EnrichedItem] = {
+
+    val motelsRDD = motels
+      .map(motels => (motels.motelId, motels.motelName))
+
     // We'll have to make some transformations to make join possible. mb a way to make it prettier?
-    bids
+    val bidsRDD = bids
       .groupBy(bidItem => (bidItem.motelId, bidItem.bidDate))
       .map(bidItems => bidItems._2.maxBy(_.price))
       .map(bidItem => (bidItem.motelId, bidItem))
-      .join(motels)
+      .join(motelsRDD)
       .map(joined => EnrichedItem(joined._1, joined._2._2, joined._2._1.bidDate, joined._2._1.loSa, joined._2._1.price))
+
+    return bidsRDD
   }
 
   /**
@@ -191,5 +197,4 @@ object MotelsHomeRecommendation {
   private def currExchange(currency: String, rate: Double): Double = {
     "%.3f".format(currency.toDouble * rate).toDouble
   }
-
 }

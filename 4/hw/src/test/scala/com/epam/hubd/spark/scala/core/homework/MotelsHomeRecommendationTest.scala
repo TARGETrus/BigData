@@ -69,8 +69,6 @@ class MotelsHomeRecommendationTest extends FunSuite with SharedSparkContext with
 
     val erroneousRecords = MotelsHomeRecommendation.getErroneousRecords(rawBids)
 
-    RddComparator.printDiff(expected, erroneousRecords)
-
     assertRDDEquals(expected, erroneousRecords)
   }
 
@@ -90,6 +88,8 @@ class MotelsHomeRecommendationTest extends FunSuite with SharedSparkContext with
   after {
     outputFolder.delete
   }
+
+
 
   private def runIntegrationTest() = {
     MotelsHomeRecommendation.processData(sc, INPUT_BIDS_INTEGRATION, INPUT_MOTELS_INTEGRATION, INPUT_EXCHANGE_RATES_INTEGRATION, outputFolder.getAbsolutePath)
