@@ -20,7 +20,13 @@ object MotelsHomeRecommendation {
     val exchangeRatesPath = args(2)
     val outputBasePath = args(3)
 
-    val sc = new SparkContext(new SparkConf().setAppName("motels-home-recommendation"))
+    val sc = new SparkContext(new SparkConf()
+      .setAppName("motels-home-recommendation")
+      .set("spark.serializer", "org.apache.spark.serializer.KryoSerializer")
+      .registerKryoClasses(
+        Array(classOf[BidError], classOf[BidItem], classOf[EnrichedItem], classOf[MotelItem])
+      )
+    )
 
     processData(sc, bidsPath, motelsPath, exchangeRatesPath, outputBasePath)
 
@@ -147,7 +153,7 @@ object MotelsHomeRecommendation {
 
         bidItems.toList
       })
-      .persist(StorageLevel.MEMORY_ONLY)
+      .persist(StorageLevel.MEMORY_ONLY_SER)
   }
 
   /**

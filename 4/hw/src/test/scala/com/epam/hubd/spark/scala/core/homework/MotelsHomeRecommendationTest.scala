@@ -176,6 +176,7 @@ class MotelsHomeRecommendationTest extends FunSuite with SharedSparkContext with
 
   after {
     outputFolder.delete
+
   }
 
 
