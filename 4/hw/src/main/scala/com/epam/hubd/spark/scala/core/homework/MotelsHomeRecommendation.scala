@@ -108,6 +108,7 @@ object MotelsHomeRecommendation {
     * @return Map packed with string dates as a key and exchange rate as value.
     */
   def getExchangeRates(sc: SparkContext, exchangeRatesPath: String): Map[String, Double] = {
+    // sc.broadcast could be used instead of returning Map.
     sc
       .textFile(exchangeRatesPath)
       .map(line => {
