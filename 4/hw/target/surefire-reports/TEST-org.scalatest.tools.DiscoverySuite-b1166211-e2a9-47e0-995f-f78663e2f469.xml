@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <testsuite 
-errors="0" failures="0" hostname="EPRUPETW1405" name="com.epam.hubd.spark.scala.core.homework.MotelsHomeRecommendationTest" tests="7" time="5.582" timestamp="2018-02-07T17:33:12">
+errors="0" failures="0" hostname="EPRUPETW1405" name="org.scalatest.tools.DiscoverySuite" tests="0" time="6.514" timestamp="2018-02-07T17:31:22">
   <properties>
     <property name="java.runtime.name" value="Java(TM) SE Runtime Environment">
     </property>
@@ -90,27 +90,6 @@ errors="0" failures="0" hostname="EPRUPETW1405" name="com.epam.hubd.spark.scala.
     <property name="sun.desktop" value="windows"> </property>
     <property name="sun.cpu.isalist" value="amd64"> </property>
   </properties>
-  <testcase 
-  name="should read raw bids" classname="com.epam.hubd.spark.scala.core.homework.MotelsHomeRecommendationTest" time="0.813">
-</testcase>
-  <testcase 
-  name="should collect erroneous records" classname="com.epam.hubd.spark.scala.core.homework.MotelsHomeRecommendationTest" time="0.242">
-</testcase>
-  <testcase 
-  name="should extract exchange rates" classname="com.epam.hubd.spark.scala.core.homework.MotelsHomeRecommendationTest" time="0.077">
-</testcase>
-  <testcase 
-  name="should filter and transform bids to BidItems" classname="com.epam.hubd.spark.scala.core.homework.MotelsHomeRecommendationTest" time="0.134">
-</testcase>
-  <testcase 
-  name="should read motels info" classname="com.epam.hubd.spark.scala.core.homework.MotelsHomeRecommendationTest" time="0.12">
-</testcase>
-  <testcase 
-  name="should find highest price per hotel" classname="com.epam.hubd.spark.scala.core.homework.MotelsHomeRecommendationTest" time="0.225">
-</testcase>
-  <testcase 
-  name="should filter errors and create correct aggregates" classname="com.epam.hubd.spark.scala.core.homework.MotelsHomeRecommendationTest" time="2.367">
-</testcase>
   <system-out><![CDATA[]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>
