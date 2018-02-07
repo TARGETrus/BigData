@@ -1,12 +1,16 @@
 Discovery starting.
-Discovery completed in 697 milliseconds.
-Run starting. Expected test count is: 3
+Discovery completed in 132 milliseconds.
+Run starting. Expected test count is: 7
 MotelsHomeRecommendationTest:
-- should read raw bids (2 seconds, 837 milliseconds)
-- should collect erroneous records (501 milliseconds)
-- should filter errors and create correct aggregates (2 seconds, 945 milliseconds)
-Run completed in 11 seconds, 963 milliseconds.
-Total number of tests run: 3
+- should read raw bids (1 second, 104 milliseconds)
+- should collect erroneous records (321 milliseconds)
+- should extract exchange rates (126 milliseconds)
+- should filter and transform bids to BidItems (195 milliseconds)
+- should read motels info (126 milliseconds)
+- should find highest price per hotel (305 milliseconds)
+- should filter errors and create correct aggregates (2 seconds, 758 milliseconds)
+Run completed in 6 seconds, 844 milliseconds.
+Total number of tests run: 7
 Suites: completed 2, aborted 0
-Tests: succeeded 3, failed 0, canceled 0, ignored 0, pending 0
+Tests: succeeded 7, failed 0, canceled 0, ignored 0, pending 0
 All tests passed.

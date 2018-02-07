@@ -186,6 +186,8 @@ object MotelsHomeRecommendation {
       .join(motelsRDD)
       .map(joined => EnrichedItem(joined._1, joined._2._2, joined._2._1.bidDate, joined._2._1.loSa, joined._2._1.price))
 
+    bids.unpersist(false)
+
     return bidsRDD
   }
 
