@@ -2,6 +2,7 @@ package com.epam.hubd.spark.scala.core.homework
 
 import com.epam.hubd.spark.scala.core.homework.domain.{BidError, BidItem, EnrichedItem, MotelItem}
 import org.apache.spark.rdd.RDD
+import org.apache.spark.storage.StorageLevel
 import org.apache.spark.{SparkConf, SparkContext}
 
 import scala.collection.mutable.ListBuffer
@@ -146,6 +147,7 @@ object MotelsHomeRecommendation {
 
         bidItems.toList
       })
+      .persist(StorageLevel.MEMORY_ONLY)
   }
 
   /**
