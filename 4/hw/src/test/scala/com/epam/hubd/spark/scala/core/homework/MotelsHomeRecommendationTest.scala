@@ -4,6 +4,7 @@ import java.io.File
 import java.nio.file.Files
 
 import com.epam.hubd.spark.scala.core.homework.MotelsHomeRecommendation.{AGGREGATED_DIR, ERRONEOUS_DIR}
+import com.epam.hubd.spark.scala.core.homework.domain.{BidItem, EnrichedItem, MotelItem}
 import com.epam.hubd.spark.scala.core.util.RddComparator
 import com.holdenkarau.spark.testing.{RDDComparisons, SharedSparkContext, SparkContextProvider}
 import org.apache.hadoop.fs.Path
@@ -11,6 +12,7 @@ import org.apache.spark.{SparkConf, SparkContext}
 import org.apache.spark.rdd.RDD
 import org.junit._
 import org.scalatest.{BeforeAndAfter, BeforeAndAfterAll, FunSuite}
+import org.scalatest.Matchers._
 
 /**
   * Created by Csaba_Bejan on 8/17/2016.
@@ -21,6 +23,8 @@ class MotelsHomeRecommendationTest extends FunSuite with SharedSparkContext with
   override def conf = new SparkConf().setMaster("local[2]").setAppName("motels-home-recommendation test")
 
   val INPUT_BIDS_SAMPLE = "src/test/resources/bids_sample.txt"
+  val INPUT_RATES_SAMPLE = "src/test/resources/exchange_rates_sample.txt"
+  val INPUT_MOTELS_SAMPLE = "src/test/resources/motels_sample.txt"
 
   val INPUT_BIDS_INTEGRATION = "src/test/resources/integration/input/bids.txt"
   val INPUT_EXCHANGE_RATES_INTEGRATION = "src/test/resources/integration/input/exchange_rate.txt"
@@ -70,6 +74,91 @@ class MotelsHomeRecommendationTest extends FunSuite with SharedSparkContext with
     val erroneousRecords = MotelsHomeRecommendation.getErroneousRecords(rawBids)
 
     assertRDDEquals(expected, erroneousRecords)
+  }
+
+  test("should extract exchange rates") {
+    val expected = Map[String, Double](
+        "11-06-05-2016" -> 0.803,
+        "11-05-08-2016" -> 0.873,
+        "10-06-11-2015" -> 0.987
+    )
+
+    val rates = MotelsHomeRecommendation.getExchangeRates(sc, INPUT_RATES_SAMPLE)
+
+    rates should be (expected)
+  }
+
+  // Use sc.parallelize with implicit data definitions OR use MotelsHomeRecommendation methods instead?
+  test("should filter and transform bids to BidItems") {
+    val bids = sc.parallelize(
+      Seq(
+        List("0000004", "15-04-08-2016", "", "1.62", "0.70", "", "1.64", "0.62", "1.08", "", "", "0.70", "", "0.57", "0.61", "0.92", "1.87"),
+        List("0000001", "06-05-02-2016", "ERROR_NO_BIDS_FOR_HOTEL"),
+        List("0000005", "15-17-08-2016", "0.45", "", "0.35", "0.42", "1.21", "1.39", "", "0.44", "1.92", "1.21", "1.54", "1.58", "0.90", "1.22", "0.72", "1.53"),
+        List("0000003", "23-04-02-2016", "ERROR_BID_SERVICE_TIMEOUT")
+      )
+    )
+
+    val rates = Map[String, Double](
+      "15-04-08-2016" -> 0.803,
+      "15-17-08-2016" -> 0.987
+    )
+
+    val expected = sc.parallelize(
+      Seq(
+        BidItem("0000004", "2016-08-04 15:00", "CA", 0.867),
+        BidItem("0000004", "2016-08-04 15:00", "MX", 1.317),
+        BidItem("0000005", "2016-08-17 15:00", "US", 0.415),
+        BidItem("0000005", "2016-08-17 15:00", "MX", 1.194)
+      )
+    )
+
+    val bidItems = MotelsHomeRecommendation.getBids(bids, rates)
+
+    assertRDDEquals(expected, bidItems)
+  }
+
+  test("should read motels info") {
+    val expected = sc.parallelize(
+      Seq(
+        MotelItem("0000001", "Olinda Windsor Inn"),
+        MotelItem("0000002", "Merlin Por Motel")
+      )
+    )
+
+    val motels = MotelsHomeRecommendation.getMotels(sc, INPUT_MOTELS_SAMPLE)
+
+    assertRDDEquals(expected, motels)
+  }
+
+  // Use sc.parallelize with implicit data definitions OR use MotelsHomeRecommendation methods instead?
+  test("should find highest price per hotel") {
+    val bidItems = sc.parallelize(
+      Seq(
+        BidItem("0000004", "2016-08-04 15:00", "CA", 0.867),
+        BidItem("0000004", "2016-08-04 15:00", "MX", 1.317),
+        BidItem("0000005", "2016-08-17 15:00", "US", 0.415),
+        BidItem("0000005", "2016-08-17 15:00", "MX", 1.194)
+      )
+    )
+
+    val motels = sc.parallelize(
+      Seq(
+        MotelItem("0000004", "Majestic Big River Elegance Plaza"),
+        MotelItem("0000005", "Majestic Ibiza Por Hostel")
+      )
+    )
+
+    val expected = sc.parallelize(
+      Seq(
+        EnrichedItem("0000004", "Majestic Big River Elegance Plaza", "2016-08-04 15:00", "MX", 1.317),
+        EnrichedItem("0000005", "Majestic Ibiza Por Hostel", "2016-08-17 15:00", "MX", 1.194)
+      )
+    )
+
+    val enriched = MotelsHomeRecommendation.getEnriched(bidItems, motels)
+
+    assertRDDEquals(expected, enriched)
   }
 
 
