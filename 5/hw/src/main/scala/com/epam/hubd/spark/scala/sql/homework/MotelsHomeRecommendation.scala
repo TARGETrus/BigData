@@ -1,9 +1,8 @@
 package com.epam.hubd.spark.scala.sql.homework
 
 import org.apache.spark.sql._
-import org.apache.spark.sql.hive.HiveContext
 import org.apache.spark.sql.expressions.UserDefinedFunction
-import org.apache.spark.{SparkConf, SparkContext}
+import org.apache.spark.storage.StorageLevel
 
 object MotelsHomeRecommendation {
 
@@ -18,21 +17,24 @@ object MotelsHomeRecommendation {
     val exchangeRatesPath = args(2)
     val outputBasePath = args(3)
 
-    val sc = new SparkContext(new SparkConf().setAppName("motels-home-recommendation"))
-    val sqlContext = new HiveContext(sc)
+    val spark = SparkSession
+      .builder()
+      .appName("motels-home-recommendation")
+      .enableHiveSupport()
+      .getOrCreate()
 
-    processData(sqlContext, bidsPath, motelsPath, exchangeRatesPath, outputBasePath)
+    processData(spark, bidsPath, motelsPath, exchangeRatesPath, outputBasePath)
 
-    sc.stop()
+    spark.stop()
   }
 
-  def processData(sqlContext: HiveContext, bidsPath: String, motelsPath: String, exchangeRatesPath: String, outputBasePath: String) = {
+  def processData(spark: SparkSession, bidsPath: String, motelsPath: String, exchangeRatesPath: String, outputBasePath: String): Unit = {
 
     /**
       * Task 1:
       * Read the bid data from the provided file.
       */
-    val rawBids: DataFrame = getRawBids(sqlContext, bidsPath)
+    val rawBids: DataFrame = getRawBids(spark, bidsPath)
 
     /**
       * Task 1:
@@ -48,7 +50,7 @@ object MotelsHomeRecommendation {
       * Read the exchange rate information.
       * Hint: You will need a mapping between a date/time and rate
       */
-    val exchangeRates: DataFrame = getExchangeRates(sqlContext, exchangeRatesPath)
+    val exchangeRates: DataFrame = getExchangeRates(spark, exchangeRatesPath)
 
     /**
       * Task 3:
@@ -71,7 +73,7 @@ object MotelsHomeRecommendation {
       * Load motels data.
       * Hint: You will need the motels name for enrichment and you will use the id for join
       */
-    val motels: DataFrame = getMotels(sqlContext, motelsPath)
+    val motels: DataFrame = getMotels(spark, motelsPath)
 
     /**
       * Task5:
@@ -83,17 +85,22 @@ object MotelsHomeRecommendation {
       .save(s"$outputBasePath/$AGGREGATED_DIR")
   }
 
-  def getRawBids(sqlContext: HiveContext, bidsPath: String): DataFrame = ???
+  def getRawBids(spark: SparkSession, bidsPath: String): DataFrame = {
+    spark
+      .read
+      .parquet(bidsPath)
+      .persist(StorageLevel.MEMORY_ONLY)
+  }
 
   def getErroneousRecords(rawBids: DataFrame): DataFrame = ???
 
-  def getExchangeRates(sqlContext: HiveContext, exchangeRatesPath: String): DataFrame = ???
+  def getExchangeRates(spark: SparkSession, exchangeRatesPath: String): DataFrame = ???
 
   def getConvertDate: UserDefinedFunction = ???
 
   def getBids(rawBids: DataFrame, exchangeRates: DataFrame): DataFrame = ???
 
-  def getMotels(sqlContext: HiveContext, motelsPath: String): DataFrame = ???
+  def getMotels(spark: SparkSession, motelsPath: String): DataFrame = ???
 
   def getEnriched(bids: DataFrame, motels: DataFrame): DataFrame = ???
 }

@@ -5,10 +5,8 @@ import java.io.File
 import com.epam.hubd.spark.scala.core.util.RddComparator
 import com.epam.hubd.spark.scala.sql.homework.MotelsHomeRecommendation.{AGGREGATED_DIR, ERRONEOUS_DIR}
 import com.epam.hubd.spark.scala.sql.homework.MotelsHomeRecommendationTest._
-import com.holdenkarau.spark.testing.RDDComparisons
 import org.apache.hadoop.fs.Path
-import org.apache.spark.sql.hive.HiveContext
-import org.apache.spark.{SparkConf, SparkContext}
+import org.apache.spark.sql.SparkSession
 import org.junit._
 import org.junit.rules.TemporaryFolder
 
@@ -19,7 +17,7 @@ class MotelsHomeRecommendationTest {
   val _temporaryFolder = new TemporaryFolder
 
   @Rule
-  def temporaryFolder = _temporaryFolder
+  def temporaryFolder: TemporaryFolder = _temporaryFolder
 
   val INPUT_BIDS_SAMPLE = "src/test/resources/bids_sample.txt"
 
@@ -30,15 +28,15 @@ class MotelsHomeRecommendationTest {
   val EXPECTED_AGGREGATED_INTEGRATION = "src/test/resources/integration/expected_output/aggregated"
   val EXPECTED_ERRORS_INTEGRATION = "src/test/resources/integration/expected_output/expected_sql"
 
-  private var outputFolder: File = null
+  private var outputFolder: File = _
 
   @Before
-  def setup() = {
+  def setup(): Unit = {
     outputFolder = temporaryFolder.newFolder("output")
   }
 
   @Test
-  def shouldFilterErrorsAndCreateCorrectAggregates() = {
+  def shouldFilterErrorsAndCreateCorrectAggregates(): Unit = {
 
     runIntegrationTest()
 
@@ -51,14 +49,27 @@ class MotelsHomeRecommendationTest {
     outputFolder.delete
   }
 
-  private def runIntegrationTest() = {
-    MotelsHomeRecommendation.processData(sqlContext, INPUT_BIDS_INTEGRATION, INPUT_MOTELS_INTEGRATION, INPUT_EXCHANGE_RATES_INTEGRATION, outputFolder.getAbsolutePath)
+  private def runIntegrationTest(): Unit = {
+    MotelsHomeRecommendation.processData(spark, INPUT_BIDS_INTEGRATION, INPUT_MOTELS_INTEGRATION, INPUT_EXCHANGE_RATES_INTEGRATION, outputFolder.getAbsolutePath)
   }
 
-  private def assertRddTextFiles(expectedPath: String, actualPath: String) = {
-    val expected = sc.textFile(expectedPath)
-    val actual = sc.textFile(actualPath)
-    RddComparator.printDiff(expected, actual)
+  private def assertRddTextFiles(expectedPath: String, actualPath: String): Unit = {
+
+    val expected = spark
+      .read
+      .format("csv")
+      .option("header", "false")
+      .option("inferSchema", "true")
+      .load(expectedPath)
+
+    val actual = spark
+      .read
+      .format("csv")
+      .option("header", "false")
+      .option("inferSchema", "true")
+      .load(actualPath)
+
+    // RddComparator.printDiff(expected, actual)
   }
 
   private def getOutputPath(dir: String): String = {
@@ -67,17 +78,19 @@ class MotelsHomeRecommendationTest {
 }
 
 object MotelsHomeRecommendationTest {
-  var sc: SparkContext = null
-  var sqlContext: HiveContext = null
+  var spark: SparkSession = _
 
   @BeforeClass
-  def beforeTests() = {
-    sc = new SparkContext(new SparkConf().setMaster("local[2]").setAppName("motels-home-recommendation test"))
-    sqlContext = new HiveContext(sc)
+  def beforeTests(): Unit = {
+    spark = SparkSession
+      .builder()
+      .appName("motels-home-recommendation test")
+      .master("local[2]")
+      .getOrCreate()
   }
 
   @AfterClass
-  def afterTests() = {
-    sc.stop
+  def afterTests(): Unit = {
+    spark.stop
   }
 }

@@ -90,7 +90,10 @@ object MotelsHomeRecommendation {
     * @return rdd with list of lines.
     */
   def getRawBids(sc: SparkContext, bidsPath: String): RDD[List[String]] = {
-    sc.textFile(bidsPath).map(line => line.split(Constants.DELIMITER).toList)
+    sc
+      .textFile(bidsPath)
+      .map(line => line.split(Constants.DELIMITER).toList)
+      .persist(StorageLevel.MEMORY_ONLY_SER)
   }
 
   /**
@@ -137,7 +140,7 @@ object MotelsHomeRecommendation {
     * @return rdd with filled BidItems.
     */
   def getBids(rawBids: RDD[List[String]], exchangeRates: Map[String, Double]): RDD[BidItem] = {
-    rawBids
+    val bidItems = rawBids
       .filter(line => {
         !line(2).contains("ERROR_")
       })
@@ -153,7 +156,10 @@ object MotelsHomeRecommendation {
 
         bidItems.toList
       })
-      .persist(StorageLevel.MEMORY_ONLY_SER)
+
+    rawBids.unpersist(false)
+
+    return bidItems
   }
 
   /**
@@ -185,16 +191,12 @@ object MotelsHomeRecommendation {
       .map(motels => (motels.motelId, motels.motelName))
 
     // We'll have to make some transformations to make join possible. mb a way to make it prettier?
-    val bidsRDD = bids
+    bids
       .groupBy(bidItem => (bidItem.motelId, bidItem.bidDate))
       .map(bidItems => bidItems._2.maxBy(_.price))
       .map(bidItem => (bidItem.motelId, bidItem))
       .join(motelsRDD)
       .map(joined => EnrichedItem(joined._1, joined._2._2, joined._2._1.bidDate, joined._2._1.loSa, joined._2._1.price))
-
-    bids.unpersist(false)
-
-    return bidsRDD
   }
 
   /**
