@@ -55,21 +55,11 @@ class MotelsHomeRecommendationTest {
 
   private def assertRddTextFiles(expectedPath: String, actualPath: String): Unit = {
 
-    val expected = spark
-      .read
-      .format("csv")
-      .option("header", "false")
-      .option("inferSchema", "true")
-      .load(expectedPath)
+    // No need to use DataFrames here, so just use existing sparkContext.
+    val expected = spark.sparkContext.textFile(expectedPath)
+    val actual = spark.sparkContext.textFile(actualPath)
 
-    val actual = spark
-      .read
-      .format("csv")
-      .option("header", "false")
-      .option("inferSchema", "true")
-      .load(actualPath)
-
-    // RddComparator.printDiff(expected, actual)
+    RddComparator.printDiff(expected, actual)
   }
 
   private def getOutputPath(dir: String): String = {
