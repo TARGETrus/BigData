@@ -2,7 +2,7 @@ package com.epam.hubd.spark.scala.sql.homework
 
 import java.io.File
 
-import com.epam.hubd.spark.scala.core.util.RddComparator
+import com.epam.hubd.spark.scala.sql.util.RddComparator
 import com.epam.hubd.spark.scala.sql.homework.MotelsHomeRecommendation.{AGGREGATED_DIR, ERRONEOUS_DIR}
 import com.epam.hubd.spark.scala.sql.homework.MotelsHomeRecommendationTest._
 import org.apache.hadoop.fs.Path
