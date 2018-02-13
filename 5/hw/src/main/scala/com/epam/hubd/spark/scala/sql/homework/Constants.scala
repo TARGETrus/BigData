@@ -7,6 +7,10 @@ object Constants {
 
   val DELIMITER = ","
 
+  val BIDS_HEADER = Seq("MotelID", "BidDate", "HU", "UK",  "NL", "US", "MX", "AU", "CA", "CN", "KR","BE", "I","JP", "IN", "HN", "GY", "DE")
+  val MOTELS_HEADER = Seq("MotelID", "MotelName", "Country", "URL", "Comment")
+  val CUSTOM_HEADER = Seq("Quantity", "LoSa", "Price")
+
   val CSV_FORMAT = "com.databricks.spark.csv"
 
   val EXCHANGE_RATES_HEADER = StructType(Array("ValidFrom", "CurrencyName", "CurrencyCode", "ExchangeRate")

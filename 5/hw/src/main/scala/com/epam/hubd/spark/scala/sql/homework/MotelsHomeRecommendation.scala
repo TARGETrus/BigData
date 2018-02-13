@@ -44,7 +44,9 @@ object MotelsHomeRecommendation {
       * Collect the errors and save the result.
       */
     val erroneousRecords: DataFrame = getErroneousRecords(rawBids)
-    erroneousRecords.write
+    erroneousRecords
+      .coalesce(1) // ONLY FOR SMALL INPUT FILES! (few GBs at most) Added for convenient HW output files.
+      .write
       .format(Constants.CSV_FORMAT)
       .save(s"$outputBasePath/$ERRONEOUS_DIR")
 
@@ -89,7 +91,9 @@ object MotelsHomeRecommendation {
       * Join the bids with motel names.
       */
     val enriched: DataFrame = getEnriched(bids, motels)
-    enriched.write
+    enriched
+      .coalesce(1) // ONLY FOR SMALL INPUT FILES! (few GBs at most) Added for convenient HW output files.
+      .write
       .format(Constants.CSV_FORMAT)
       .save(s"$outputBasePath/$AGGREGATED_DIR")
   }
@@ -242,9 +246,10 @@ object MotelsHomeRecommendation {
   def getMotels(spark: SparkSession, motelsPath: String): DataFrame = {
 
     // User-defined motels data schema.
-    val schema = new StructType()
-      .add(StructField("MotelID", StringType, nullable = false))
-      .add(StructField("MotelName", StringType, nullable = false))
+    val schema = StructType(Seq(
+      StructField("MotelID", StringType, nullable = false),
+      StructField("MotelName", StringType, nullable = false)
+    ))
 
     // Here we use schema to override metadata inferring while reading from parquet file. (Programmatic way)
     // Can be used to read only specific columns. In case of column names/types in schema are not corresponding

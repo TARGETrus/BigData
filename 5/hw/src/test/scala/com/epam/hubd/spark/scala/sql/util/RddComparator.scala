@@ -2,11 +2,8 @@ package com.epam.hubd.spark.scala.sql.util
 
 import org.apache.spark.rdd.RDD
 
-/**
-  * Created by Csaba_Bejan on 8/30/2016.
-  */
 object RddComparator {
-  def printDiff(expected: RDD[String], actual: RDD[String]) = {
+  def printDiff(expected: RDD[String], actual: RDD[String]): Unit = {
     val actualArray = actual.collect
     val expectedArray = expected.collect
     val expectedDiff = expectedArray.filter(x => !actualArray.contains(x)).mkString("\n")
