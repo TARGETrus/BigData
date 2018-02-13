@@ -2,4 +2,4 @@
 spark-submit --master local[4] --class com.epam.hubd.spark.scala.sql.homework.MotelsHomeRecommendation D:\BD_Course\_Homework\5\hw\target\spark-sql-homework-1.0.0.jar D:\BD_Course\_Homework\5\hw\local\input\bids D:\BD_Course\_Homework\5\hw\local\input\motels D:\BD_Course\_Homework\5\hw\local\input\rates D:\BD_Course\_Homework\5\hw\local\out
 
 // On top of yarn execution
-spark-submit --master yarn-client --driver-memory 1g --num-executors 3 --executor-memory 1g --conf spark.executor.cores=5 --class com.epam.hubd.spark.scala.sql.homework.MotelsHomeRecommendation spark-sql-homework-1.0.0.jar /user/maria_dev/spark_input/bids /user/maria_dev/spark_input/motels /user/maria_dev/spark_input/exchange_rates /user/maria_dev/spark-sql-output
+spark-submit --master yarn-client --driver-memory 1g --num-executors 3 --executor-memory 1g --conf spark.executor.cores=5 --class com.epam.hubd.spark.scala.sql.homework.MotelsHomeRecommendation spark-sql-homework-1.0.0.jar /user/maria_dev/spark_sql_input/bids /user/maria_dev/spark_sql_input/motels /user/maria_dev/spark_sql_input/exchange_rates /user/maria_dev/spark-sql-output
