@@ -29,6 +29,11 @@ hs_err_pid*
 .gradle
 /build/
 
+/out/
+/spark-warehouse/
+/checkpoint/
+/metastore_db/
+
 # Ignore Gradle GUI config
 gradle-app.setting
 
