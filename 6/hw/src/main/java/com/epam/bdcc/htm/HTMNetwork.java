@@ -13,6 +13,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class HTMNetwork implements Serializable {
+
     private static final long serialVersionUID = 1L;
 
     private static final String STR_DT = "DT";
@@ -45,7 +46,10 @@ public class HTMNetwork implements Serializable {
                         ));
     }
 
-    private Map<String, Map<String, Object>> setupMap(Map<String, Map<String, Object>> map, Integer n, Integer w, Double min, Double max, Double radius, Double resolution, Boolean periodic, Boolean clip, Boolean forced, String fieldName, String fieldType, String encoderType) {
+    private Map<String, Map<String, Object>> setupMap(Map<String, Map<String, Object>> map, Integer n, Integer w,
+                                                      Double min, Double max, Double radius, Double resolution,
+                                                      Boolean periodic, Boolean clip, Boolean forced, String fieldName,
+                                                      String fieldType, String encoderType) {
         if (map == null) {
             map = new HashMap<>();
         }
@@ -72,7 +76,8 @@ public class HTMNetwork implements Serializable {
     }
 
     private Map<String, Map<String, Object>> getFieldEncodingMap() {
-        Map<String, Map<String, Object>> fieldEncodings = setupMap(null, 0, 0, 0.0d, 0.0d, 0.0d, 0.0d, null, null, null, STR_DT, "datetime", "DateEncoder");
+        Map<String, Map<String, Object>> fieldEncodings = setupMap(null, 0, 0, 0.0d, 0.0d,
+                0.0d, 0.0d, null, null, null, STR_DT, "datetime", "DateEncoder");
 
         // remove the time of day
         // fieldEncodings.get("DT").put(Parameters.KEY.DATEFIELD_TOFD.getFieldName(), new Tuple(21, 9.5)); // Time of day
@@ -82,7 +87,8 @@ public class HTMNetwork implements Serializable {
         fieldEncodings.get(STR_DT).put(Parameters.KEY.DATEFIELD_PATTERN.getFieldName(), STR_DT_FORMAT);
 
         // !!! check these parameters
-        fieldEncodings = setupMap(fieldEncodings, 0, 51, 0.0d, 0.1d, 0.0d, 0.001d, null, Boolean.TRUE, null, STR_MEASUREMENT, "float", "ScalarEncoder");
+        fieldEncodings = setupMap(fieldEncodings, 0, 51, 0.0d, 0.1d, 0.0d, 0.001d,
+                null, Boolean.TRUE, null, STR_MEASUREMENT, "float", "ScalarEncoder");
 
         return fieldEncodings;
     }

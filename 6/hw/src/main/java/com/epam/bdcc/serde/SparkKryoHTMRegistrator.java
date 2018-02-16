@@ -16,6 +16,6 @@ public class SparkKryoHTMRegistrator implements KryoRegistrator {
         SparkKryoHTMSerializer.registerSerializers(kryo);
 
         //TODO : We should register the top level classes with kryo
-        throw new UnsupportedOperationException("We should register the top level classes with kryo");
+        // throw new UnsupportedOperationException("We should register the top level classes with kryo");
     }
 }

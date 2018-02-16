@@ -9,12 +9,17 @@ import org.numenta.nupic.serialize.HTMObjectInput;
 import org.numenta.nupic.serialize.HTMObjectOutput;
 import org.numenta.nupic.serialize.SerialConfig;
 import org.numenta.nupic.serialize.SerializerCore;
+import org.nustaq.serialization.FSTConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
+
 // SerDe HTM objects using SerializerCore (https://github.com/RuedigerMoeller/fast-serialization)
 public class SparkKryoHTMSerializer<T> extends Serializer<T> {
+
     private static final Logger LOGGER = LoggerFactory.getLogger(SparkKryoHTMSerializer.class);
+
     private final SerializerCore htmSerializer = new SerializerCore(SerialConfig.DEFAULT_REGISTERED_TYPES);
 
     public SparkKryoHTMSerializer() {
@@ -23,22 +28,31 @@ public class SparkKryoHTMSerializer<T> extends Serializer<T> {
 
     @Override
     public T copy(Kryo kryo, T original) {
-        //TODO : Add implementation for clone, if needed
-        throw new UnsupportedOperationException("Add implementation for close");
+        //TODO : Add valid implementation for clone.
+        return super.copy(kryo, original);
     }
 
     @Override
     public void write(Kryo kryo, Output kryoOutput, T t) {
-        HTMObjectOutput writer = null;
-        //TODO : Add implementation for serialization
-        throw new UnsupportedOperationException("Add implementation for serialization");
+        try {
+            HTMObjectOutput writer = new HTMObjectOutput(kryoOutput, FSTConfiguration.createDefaultConfiguration());
+            writer.writeObject(t, t.getClass());
+        } catch (IOException e) {
+            e.printStackTrace();
+            LOGGER.error(e.getMessage(), e);
+        }
     }
 
     @Override
     public T read(Kryo kryo, Input kryoInput, Class<T> aClass) {
-        HTMObjectInput reader = null;
-        //TODO : Add implementation for deserialization
-        throw new UnsupportedOperationException("Add implementation for deserialization");
+        try {
+            HTMObjectInput reader = new HTMObjectInput(kryoInput, FSTConfiguration.createDefaultConfiguration());
+            return aClass.cast(reader.readObject(aClass));
+        } catch (Exception e) {
+            e.printStackTrace();
+            LOGGER.error(e.getMessage(), e);
+        }
+        return null;
     }
 
     public static void registerSerializers(Kryo kryo) {
