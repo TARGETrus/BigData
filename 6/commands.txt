@@ -11,14 +11,17 @@ REM Create kafka 'monitoring20' topic:
 .\bin\windows\kafka-topics.bat --create --zookeeper localhost:2181 --replication-factor 1 --partitions 10 --topic monitoring20
 
 REM Create kafka 'monitoringEnriched2' topic:
-.\bin\windows\kafka-topics.bat --create --zookeeper localhost:2181 --replication-factor 1 --partitions 10 --topic monitoringEnriched2
+.\bin\windows\kafka-topics.bat --create --zookeeper localhost:2181 --replication-factor 1 --partitions 1 --topic monitoringEnriched2
 
 REM Convenience commands:
 REM Delete Topic: 
-.\bin\windows\kafka-run-class.bat kafka.admin.TopicCommand --delete --topic [topic_to_delete] --zookeeper localhost:2181
+.\bin\windows\kafka-run-class.bat kafka.admin.TopicCommand --delete --topic monitoring20 --zookeeper localhost:2181
+.\bin\windows\kafka-run-class.bat kafka.admin.TopicCommand --delete --topic monitoringEnriched2 --zookeeper localhost:2181
 REM List Topics: 
 .\bin\windows\kafka-topics.bat --list --zookeeper localhost:2181
 REM Describe Topic: 
-.\bin\windows\kafka-topics.bat --describe --zookeeper localhost:2181 --topic [Topic Name]
+.\bin\windows\kafka-topics.bat --describe --zookeeper localhost:2181 --topic monitoring20
 REM Read messages from beginning: 
-.\bin\windows\kafka-console-consumer.bat --zookeeper localhost:2181 --topic [Topic Name] --from-beginning
+.\bin\windows\kafka-console-consumer.bat --zookeeper localhost:2181 --topic monitoring20 --from-beginning
+
+spark-submit --master local[4] --class com.epam.bdcc.spark.AnomalyDetector D:\BD_Course\_Homework\6\hw\target\realtime-anomaly-detection-1.0-jar-with-dependencies.jar

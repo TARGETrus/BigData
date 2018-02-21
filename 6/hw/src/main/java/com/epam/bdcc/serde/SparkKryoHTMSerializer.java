@@ -28,7 +28,7 @@ public class SparkKryoHTMSerializer<T> extends Serializer<T> {
 
     @Override
     public T copy(Kryo kryo, T original) {
-        //TODO : Add valid implementation for clone.
+        // Implement custom clone if needed.
         return super.copy(kryo, original);
     }
 

@@ -5,7 +5,6 @@ import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.spark.streaming.kafka010.ConsumerStrategies;
 import org.apache.spark.streaming.kafka010.ConsumerStrategy;
 
-import java.util.Arrays;
 import java.util.Collection;
 
 import static com.epam.bdcc.utils.PropertiesLoader.getKafkaConsumerProperties;
@@ -17,9 +16,8 @@ public class KafkaHelper {
         return new KafkaProducer<>(getKafkaProducerProperties());
     }
 
-    public static ConsumerStrategy<String, MonitoringRecord> createConsumerStrategy(String topics) {
-        Collection<String> topicsList = Arrays.asList(topics.split(","));
-        return ConsumerStrategies.Subscribe(topicsList, getKafkaConsumerProperties());
+    public static ConsumerStrategy<String, MonitoringRecord> createConsumerStrategy(Collection<String> topics) {
+        return ConsumerStrategies.Subscribe(topics, getKafkaConsumerProperties());
     }
 
     public static String getKey(MonitoringRecord record) {

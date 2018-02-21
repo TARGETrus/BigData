@@ -3,19 +3,27 @@ package com.epam.bdcc.spark;
 import com.epam.bdcc.htm.HTMNetwork;
 import com.epam.bdcc.htm.MonitoringRecord;
 import com.epam.bdcc.htm.ResultState;
+import com.epam.bdcc.kafka.KafkaHelper;
 import com.epam.bdcc.utils.GlobalConstants;
 import com.epam.bdcc.utils.PropertiesLoader;
+import org.apache.kafka.clients.consumer.ConsumerRecord;
+import org.apache.kafka.clients.producer.Callback;
+import org.apache.kafka.clients.producer.Producer;
+import org.apache.kafka.clients.producer.ProducerRecord;
+import org.apache.kafka.clients.producer.RecordMetadata;
 import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.Optional;
 import org.apache.spark.api.java.function.Function3;
 import org.apache.spark.streaming.Duration;
 import org.apache.spark.streaming.State;
-import org.apache.spark.streaming.api.java.JavaStreamingContext;
+import org.apache.spark.streaming.StateSpec;
+import org.apache.spark.streaming.api.java.*;
+import org.apache.spark.streaming.kafka010.*;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
+import scala.Tuple2;
 
-import java.util.HashMap;
-import java.util.Properties;
+import java.util.*;
 
 public class AnomalyDetector implements GlobalConstants {
     /**
@@ -41,16 +49,62 @@ public class AnomalyDetector implements GlobalConstants {
             final Duration batchDuration      = Duration.apply(Long.parseLong(applicationProperties.getProperty(SPARK_BATCH_DURATION_CONFIG)));
             final Duration checkpointInterval = Duration.apply(Long.parseLong(applicationProperties.getProperty(SPARK_CHECKPOINT_INTERVAL_CONFIG)));
 
-            SparkConf conf = new SparkConf()
-                    .setAppName(appName);
-            JavaStreamingContext jSteamingCtx = new JavaStreamingContext(conf, new Duration(2000));
-            //TODO : Create your pipeline here!!!
+            SparkConf conf = new SparkConf().setAppName(appName);
+            /*JavaStreamingContext jSteamingCtx = JavaStreamingContext.getOrCreate(
+                    checkpointDir,
+                    () -> new JavaStreamingContext(conf, batchDuration)
+            );*/
+            JavaStreamingContext jSteamingCtx = new JavaStreamingContext(conf, batchDuration);
+            jSteamingCtx.checkpoint(checkpointDir);
+
+            Collection<String> topics = Arrays.asList(rawTopicName, enrichedTopicName);
+
+            JavaInputDStream<ConsumerRecord<String, MonitoringRecord>> dStream =
+                KafkaUtils
+                        .createDirectStream(
+                                jSteamingCtx,
+                                LocationStrategies.PreferConsistent(),
+                                KafkaHelper.createConsumerStrategy(topics)
+                        );
+
+            processData(dStream, enrichedTopicName);
 
             jSteamingCtx.start();
             jSteamingCtx.awaitTermination();
         }
     }
 
+    /**
+     * Used to enrich MonitoringRecord's from one kafka topic using HTM functionality and write it to another.
+     *
+     * @param dStream input stream from kafka.
+     * @param topicToWriteTo kafka topic name to write output in.
+     */
+    public static void processData(JavaInputDStream<ConsumerRecord<String, MonitoringRecord>> dStream, String topicToWriteTo) {
+        dStream
+                .mapToPair(record -> new Tuple2<>(record.key(), record.value()))
+                .mapWithState(StateSpec.function(mappingFunc))
+                .foreachRDD(rdd ->
+                    rdd.foreachPartition(rddPartition -> {
+                        Producer<String, MonitoringRecord> producer = KafkaHelper.createProducer();
+                        rddPartition.forEachRemaining(rec ->{
+                            ProducerRecord<String, MonitoringRecord> record =
+                                    new ProducerRecord<>(topicToWriteTo, KafkaHelper.getKey(rec), rec);
+                            producer.send(record, (RecordMetadata metadata, Exception e) -> {
+                                if (e != null)
+                                    e.printStackTrace();
+                                System.out.println("The offset of the record we just sent is: " + metadata.offset());
+                            });
+                        });
+                        producer.close();
+                    })
+                );
+    }
+
+    /**
+     * Lambda used for stateful HTM calculations.
+     * Holds one HTMNetwork stateful object for each deviceID.
+     */
     private static Function3<String, Optional<MonitoringRecord>, State<HTMNetwork>, MonitoringRecord> mappingFunc =
             (deviceID, recordOpt, state) -> {
 
