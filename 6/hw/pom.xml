@@ -12,8 +12,6 @@
     <properties>
 
         <build.scope>provided</build.scope>
-        <app.jar.name>${project.artifactId}-${project.version}-package</app.jar.name>
-
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
         <scala.version>2.11.11</scala.version>

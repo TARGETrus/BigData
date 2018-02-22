@@ -5,7 +5,6 @@ import com.epam.bdcc.utils.GlobalConstants;
 import com.epam.bdcc.utils.PropertiesLoader;
 import org.apache.kafka.clients.producer.Producer;
 import org.apache.kafka.clients.producer.ProducerRecord;
-import org.apache.kafka.clients.producer.RecordMetadata;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,11 +24,13 @@ public class TopicGenerator implements GlobalConstants {
      * @param args input args.
      */
     public static void main(String[] args) {
-        // load a properties file from class path, inside static method
+
         Properties applicationProperties = PropertiesLoader.getGlobalProperties();
         if (!applicationProperties.isEmpty()) {
             final boolean skipHeader = Boolean.parseBoolean(applicationProperties.getProperty(GENERATOR_SKIP_HEADER_CONFIG));
             final String  sampleFile = applicationProperties.getProperty(GENERATOR_SAMPLE_FILE_CONFIG);
+            final long    batchSleep = Long.parseLong(applicationProperties.getProperty(GENERATOR_BATCH_SLEEP_CONFIG));
+            final int     batchSize  = Integer.parseInt(applicationProperties.getProperty(BATCH_SIZE_CONFIG));
             final String  topicName  = applicationProperties.getProperty(KAFKA_RAW_TOPIC_CONFIG);
 
             Producer<String, MonitoringRecord> producer = KafkaHelper.createProducer();
@@ -41,16 +42,26 @@ public class TopicGenerator implements GlobalConstants {
                 stream
                         .skip(skipHeader ? 1 : 0)
                         .forEach(line -> {
+                            //for (int i = 0; i < batchSize; i++) {
+                                try {
+                                    String[] values = line.split("[\\s]*,[\\s]*");
+                                    MonitoringRecord rawRecord = new MonitoringRecord(values);
+                                    /*System.out.printf("Key: [key] :: %s, %s \n",
+                                            rawRecord.getCountyCode(), rawRecord.getDateGMT());*/
+                                    ProducerRecord<String, MonitoringRecord> record =
+                                            new ProducerRecord<>(topicName, KafkaHelper.getKey(rawRecord), rawRecord);
+                                    producer.send(record).get();
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                    LOGGER.error(e.getMessage(), e);
+                                }
+                            /*}
                             try {
-                                String[] values = line.split("[\\s]*,[\\s]*");
-                                MonitoringRecord rawRecord = new MonitoringRecord(values);
-                                ProducerRecord<String, MonitoringRecord> record =
-                                        new ProducerRecord<>(topicName, KafkaHelper.getKey(rawRecord), rawRecord);
-                                producer.send(record).get();
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                                LOGGER.error(e.getMessage(), e);
-                            }
+                                // Attempt to simulate device logs flow.
+                                Thread.sleep(batchSleep);
+                            } catch (InterruptedException e) {
+                                throw new RuntimeException(e);
+                            }*/
                         });
             } catch (IOException e) {
                 e.printStackTrace();

@@ -7,10 +7,8 @@ import com.epam.bdcc.kafka.KafkaHelper;
 import com.epam.bdcc.utils.GlobalConstants;
 import com.epam.bdcc.utils.PropertiesLoader;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
-import org.apache.kafka.clients.producer.Callback;
 import org.apache.kafka.clients.producer.Producer;
 import org.apache.kafka.clients.producer.ProducerRecord;
-import org.apache.kafka.clients.producer.RecordMetadata;
 import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.Optional;
 import org.apache.spark.api.java.function.Function3;
@@ -42,14 +40,24 @@ public class AnomalyDetector implements GlobalConstants {
         final Properties applicationProperties = PropertiesLoader.getGlobalProperties();
 
         if (!applicationProperties.isEmpty()) {
-            final String   appName            = applicationProperties.getProperty(SPARK_APP_NAME_CONFIG);
-            final String   rawTopicName       = applicationProperties.getProperty(KAFKA_RAW_TOPIC_CONFIG);
-            final String   enrichedTopicName  = applicationProperties.getProperty(KAFKA_ENRICHED_TOPIC_CONFIG);
-            final String   checkpointDir      = applicationProperties.getProperty(SPARK_CHECKPOINT_DIR_CONFIG);
-            final Duration batchDuration      = Duration.apply(Long.parseLong(applicationProperties.getProperty(SPARK_BATCH_DURATION_CONFIG)));
-            final Duration checkpointInterval = Duration.apply(Long.parseLong(applicationProperties.getProperty(SPARK_CHECKPOINT_INTERVAL_CONFIG)));
+            final String   appName              = applicationProperties.getProperty(SPARK_APP_NAME_CONFIG);
+            final String   rawTopicName         = applicationProperties.getProperty(KAFKA_RAW_TOPIC_CONFIG);
+            final String   enrichedTopicName    = applicationProperties.getProperty(KAFKA_ENRICHED_TOPIC_CONFIG);
+            final String   checkpointDir        = applicationProperties.getProperty(SPARK_CHECKPOINT_DIR_CONFIG);
+            final String   sparkSerializer      = applicationProperties.getProperty(SPARK_INTERNAL_SERIALIZER_CONFIG);
+            final String   sparkKryoRegistrator = applicationProperties.getProperty(SPARK_KRYO_REGISTRATOR_CONFIG);
+            final String   sparkKryoRegRequired = applicationProperties.getProperty(SPARK_KRYO_REGISTRATOR_REQUIRED_CONFIG);
+            final String   sparkBackPressure    = applicationProperties.getProperty(SPARK_BACKPRESSURE_CONFIG);
+            final Duration batchDuration        = Duration.apply(Long.parseLong(applicationProperties.getProperty(SPARK_BATCH_DURATION_CONFIG)));
+            final Duration checkpointInterval   = Duration.apply(Long.parseLong(applicationProperties.getProperty(SPARK_CHECKPOINT_INTERVAL_CONFIG)));
 
-            SparkConf conf = new SparkConf().setAppName(appName);
+            SparkConf conf = new SparkConf().setAppName(appName)
+                    .set(SPARK_INTERNAL_SERIALIZER_CONFIG, sparkSerializer)
+                    .set(SPARK_KRYO_REGISTRATOR_CONFIG, sparkKryoRegistrator)
+                    .set(SPARK_KRYO_REGISTRATOR_REQUIRED_CONFIG, sparkKryoRegRequired)
+                    .set(SPARK_BACKPRESSURE_CONFIG, sparkBackPressure)
+                    .set(SPARK_BACKPRESSURE_INITIAL_RATE_CONFIG, "100")
+                    .set(SPARK_KAFKA_MAX_RATE_PER_PARTITION_CONFIG, "25");
             /*JavaStreamingContext jSteamingCtx = JavaStreamingContext.getOrCreate(
                     checkpointDir,
                     () -> new JavaStreamingContext(conf, batchDuration)
@@ -59,7 +67,7 @@ public class AnomalyDetector implements GlobalConstants {
 
             Collection<String> topics = Arrays.asList(rawTopicName, enrichedTopicName);
 
-            JavaInputDStream<ConsumerRecord<String, MonitoringRecord>> dStream =
+            JavaInputDStream<ConsumerRecord<String, MonitoringRecord>> kafkaStream =
                 KafkaUtils
                         .createDirectStream(
                                 jSteamingCtx,
@@ -67,7 +75,9 @@ public class AnomalyDetector implements GlobalConstants {
                                 KafkaHelper.createConsumerStrategy(topics)
                         );
 
-            processData(dStream, enrichedTopicName);
+            kafkaStream.checkpoint(checkpointInterval);
+
+            processData(kafkaStream, enrichedTopicName);
 
             jSteamingCtx.start();
             jSteamingCtx.awaitTermination();
@@ -77,12 +87,15 @@ public class AnomalyDetector implements GlobalConstants {
     /**
      * Used to enrich MonitoringRecord's from one kafka topic using HTM functionality and write it to another.
      *
-     * @param dStream input stream from kafka.
+     * @param kafkaStream input stream from kafka.
      * @param topicToWriteTo kafka topic name to write output in.
      */
-    public static void processData(JavaInputDStream<ConsumerRecord<String, MonitoringRecord>> dStream, String topicToWriteTo) {
-        dStream
-                .mapToPair(record -> new Tuple2<>(record.key(), record.value()))
+    public static void processData(JavaInputDStream<ConsumerRecord<String, MonitoringRecord>> kafkaStream, String topicToWriteTo) {
+
+        JavaPairDStream<String, MonitoringRecord> pairKafkaStream = kafkaStream
+                .mapToPair(record -> new Tuple2<>(record.key(), record.value()));
+
+        pairKafkaStream
                 .mapWithState(StateSpec.function(mappingFunc))
                 .foreachRDD(rdd ->
                     rdd.foreachPartition(rddPartition -> {
@@ -90,11 +103,7 @@ public class AnomalyDetector implements GlobalConstants {
                         rddPartition.forEachRemaining(rec ->{
                             ProducerRecord<String, MonitoringRecord> record =
                                     new ProducerRecord<>(topicToWriteTo, KafkaHelper.getKey(rec), rec);
-                            producer.send(record, (RecordMetadata metadata, Exception e) -> {
-                                if (e != null)
-                                    e.printStackTrace();
-                                System.out.println("The offset of the record we just sent is: " + metadata.offset());
-                            });
+                            producer.send(record);
                         });
                         producer.close();
                     })
