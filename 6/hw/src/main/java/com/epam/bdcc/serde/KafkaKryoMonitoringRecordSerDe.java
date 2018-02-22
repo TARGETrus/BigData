@@ -58,7 +58,7 @@ public class KafkaKryoMonitoringRecordSerDe implements Closeable, AutoCloseable,
     /**
      * Internal class used for Kryo SerDe.
      */
-    private static class KryoInternalSerializer extends com.esotericsoftware.kryo.Serializer<MonitoringRecord> {
+    public static class KryoInternalSerializer extends com.esotericsoftware.kryo.Serializer<MonitoringRecord> {
 
         @Override
         public void write(Kryo kryo, Output kryoOutput, MonitoringRecord monitoringRecord) {

@@ -23,4 +23,8 @@ public interface GlobalConstants {
     String SPARK_INTERNAL_SERIALIZER_CONFIG = "spark.serializer";
     String SPARK_KRYO_REGISTRATOR_CONFIG = "spark.kryo.registrator";
     String SPARK_KRYO_REGISTRATOR_REQUIRED_CONFIG = "spark.kryo.registrationRequired";
+    String SPARK_BACKPRESSURE_CONFIG = "spark.streaming.backpressure.enabled";
+    String SPARK_BACKPRESSURE_INITIAL_RATE_CONFIG = "spark.streaming.backpressure.initialRate";
+    String SPARK_KAFKA_MAX_RATE_PER_PARTITION_CONFIG = "spark.streaming.kafka.maxRatePerPartition";
+    String SPARK_RECEIVER_WRITE_AHEAD_LOG_CONFIG = "spark.streaming.receiver.writeAheadLog.enable";
 }

@@ -40,7 +40,7 @@ public class PropertiesLoader {
                 kafkaProducerProperties.put(LINGER_MS_CONFIG, globalProperties.getProperty(LINGER_MS_CONFIG));
                 kafkaProducerProperties.put(BUFFER_MEMORY_CONFIG, globalProperties.getProperty(BUFFER_MEMORY_CONFIG));
                 kafkaProducerProperties.put(KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
-                kafkaProducerProperties.put(VALUE_SERIALIZER_CLASS_CONFIG, KafkaJsonMonitoringRecordSerDe.class);
+                kafkaProducerProperties.put(VALUE_SERIALIZER_CLASS_CONFIG, KafkaKryoMonitoringRecordSerDe.class);
                 kafkaProducerProperties.put(PARTITIONER_CLASS_CONFIG, MonitoringRecordPartitioner.class);
 
                 kafkaConsumerProperties.put(BOOTSTRAP_SERVERS_CONFIG, globalProperties.getProperty(BOOTSTRAP_SERVERS_CONFIG));
@@ -48,7 +48,7 @@ public class PropertiesLoader {
                 kafkaConsumerProperties.put(AUTO_OFFSET_RESET_CONFIG, globalProperties.getProperty(AUTO_OFFSET_RESET_CONFIG));
                 kafkaConsumerProperties.put(ENABLE_AUTO_COMMIT_CONFIG, globalProperties.getProperty(ENABLE_AUTO_COMMIT_CONFIG));
                 kafkaConsumerProperties.put(KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
-                kafkaConsumerProperties.put(VALUE_DESERIALIZER_CLASS_CONFIG, KafkaJsonMonitoringRecordSerDe.class);
+                kafkaConsumerProperties.put(VALUE_DESERIALIZER_CLASS_CONFIG, KafkaKryoMonitoringRecordSerDe.class);
             }
         } catch (IOException e) {
             LOGGER.error("Sorry, unable to read properties file", e);
