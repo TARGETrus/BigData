@@ -23,5 +23,6 @@ REM Describe Topic:
 .\bin\windows\kafka-topics.bat --describe --zookeeper localhost:2181 --topic monitoring20
 REM Read messages from beginning: 
 .\bin\windows\kafka-console-consumer.bat --zookeeper localhost:2181 --topic monitoring20 --from-beginning
+.\bin\windows\kafka-console-consumer.bat --zookeeper localhost:2181 --topic monitoringEnriched2 --from-beginning
 
 spark-submit --master local[4] --class com.epam.bdcc.spark.AnomalyDetector D:\BD_Course\_Homework\6\hw\target\realtime-anomaly-detection-1.0-jar-with-dependencies.jar

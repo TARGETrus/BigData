@@ -18,7 +18,7 @@ public class SparkKryoRegistrator implements KryoRegistrator {
         // which WILL call the preSerialize/postDeserialize
         SparkKryoHTMSerializer.registerSerializers(kryo);
 
-        kryo.register(MonitoringRecord.class);
+        kryo.register(MonitoringRecord.class, new KafkaKryoMonitoringRecordSerDe.KryoInternalSerializer());
         kryo.register(ResultState.class);
     }
 }

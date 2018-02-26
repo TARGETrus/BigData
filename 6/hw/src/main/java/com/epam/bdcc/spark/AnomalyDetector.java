@@ -48,16 +48,20 @@ public class AnomalyDetector implements GlobalConstants {
             final String   sparkKryoRegistrator = applicationProperties.getProperty(SPARK_KRYO_REGISTRATOR_CONFIG);
             final String   sparkKryoRegRequired = applicationProperties.getProperty(SPARK_KRYO_REGISTRATOR_REQUIRED_CONFIG);
             final String   sparkBackPressure    = applicationProperties.getProperty(SPARK_BACKPRESSURE_CONFIG);
+            final String   sparkBackInitialRate = applicationProperties.getProperty(SPARK_BACKPRESSURE_INITIAL_RATE_CONFIG);
+            final String   sparkKafkaMaxRatePP  = applicationProperties.getProperty(SPARK_KAFKA_MAX_RATE_PER_PARTITION_CONFIG);
             final Duration batchDuration        = Duration.apply(Long.parseLong(applicationProperties.getProperty(SPARK_BATCH_DURATION_CONFIG)));
+            final Duration windowDuration       = Duration.apply(Long.parseLong(applicationProperties.getProperty(SPARK_WINDOW_DURATION_CONFIG)));
             final Duration checkpointInterval   = Duration.apply(Long.parseLong(applicationProperties.getProperty(SPARK_CHECKPOINT_INTERVAL_CONFIG)));
 
-            SparkConf conf = new SparkConf().setAppName(appName)
+            SparkConf conf = new SparkConf()
+                    .setAppName(appName)
                     .set(SPARK_INTERNAL_SERIALIZER_CONFIG, sparkSerializer)
                     .set(SPARK_KRYO_REGISTRATOR_CONFIG, sparkKryoRegistrator)
                     .set(SPARK_KRYO_REGISTRATOR_REQUIRED_CONFIG, sparkKryoRegRequired)
                     .set(SPARK_BACKPRESSURE_CONFIG, sparkBackPressure)
-                    .set(SPARK_BACKPRESSURE_INITIAL_RATE_CONFIG, "100")
-                    .set(SPARK_KAFKA_MAX_RATE_PER_PARTITION_CONFIG, "25");
+                    .set(SPARK_BACKPRESSURE_INITIAL_RATE_CONFIG, sparkBackInitialRate)
+                    .set(SPARK_KAFKA_MAX_RATE_PER_PARTITION_CONFIG, sparkKafkaMaxRatePP);
             /*JavaStreamingContext jSteamingCtx = JavaStreamingContext.getOrCreate(
                     checkpointDir,
                     () -> new JavaStreamingContext(conf, batchDuration)
@@ -75,9 +79,12 @@ public class AnomalyDetector implements GlobalConstants {
                                 KafkaHelper.createConsumerStrategy(topics)
                         );
 
-            kafkaStream.checkpoint(checkpointInterval);
+            JavaPairDStream<String, MonitoringRecord> pairKafkaStream = kafkaStream
+                    .mapToPair(record -> new Tuple2<>(record.key(), record.value()));
 
-            processData(kafkaStream, enrichedTopicName);
+            pairKafkaStream.checkpoint(checkpointInterval);
+
+            processData(pairKafkaStream, enrichedTopicName, windowDuration);
 
             jSteamingCtx.start();
             jSteamingCtx.awaitTermination();
@@ -87,15 +94,15 @@ public class AnomalyDetector implements GlobalConstants {
     /**
      * Used to enrich MonitoringRecord's from one kafka topic using HTM functionality and write it to another.
      *
-     * @param kafkaStream input stream from kafka.
+     * @param pairKafkaStream paired [K,V] input stream from kafka.
      * @param topicToWriteTo kafka topic name to write output in.
+     * @param windowDuration window size in Duration.
      */
-    public static void processData(JavaInputDStream<ConsumerRecord<String, MonitoringRecord>> kafkaStream, String topicToWriteTo) {
-
-        JavaPairDStream<String, MonitoringRecord> pairKafkaStream = kafkaStream
-                .mapToPair(record -> new Tuple2<>(record.key(), record.value()));
+    public static void processData(JavaPairDStream<String, MonitoringRecord> pairKafkaStream,
+                                   String topicToWriteTo, Duration windowDuration) {
 
         pairKafkaStream
+                .window(windowDuration)
                 .mapWithState(StateSpec.function(mappingFunc))
                 .foreachRDD(rdd ->
                     rdd.foreachPartition(rddPartition -> {

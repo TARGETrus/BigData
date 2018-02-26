@@ -9,7 +9,6 @@ import org.numenta.nupic.serialize.HTMObjectInput;
 import org.numenta.nupic.serialize.HTMObjectOutput;
 import org.numenta.nupic.serialize.SerialConfig;
 import org.numenta.nupic.serialize.SerializerCore;
-import org.nustaq.serialization.FSTConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,7 +34,7 @@ public class SparkKryoHTMSerializer<T> extends Serializer<T> {
     @Override
     public void write(Kryo kryo, Output kryoOutput, T t) {
         try {
-            HTMObjectOutput writer = new HTMObjectOutput(kryoOutput, FSTConfiguration.createDefaultConfiguration());
+            HTMObjectOutput writer = htmSerializer.getObjectOutput(kryoOutput);
             writer.writeObject(t, t.getClass());
         } catch (IOException e) {
             e.printStackTrace();
@@ -46,7 +45,7 @@ public class SparkKryoHTMSerializer<T> extends Serializer<T> {
     @Override
     public T read(Kryo kryo, Input kryoInput, Class<T> aClass) {
         try {
-            HTMObjectInput reader = new HTMObjectInput(kryoInput, FSTConfiguration.createDefaultConfiguration());
+            HTMObjectInput reader = htmSerializer.getObjectInput(kryoInput);
             return aClass.cast(reader.readObject(aClass));
         } catch (Exception e) {
             e.printStackTrace();

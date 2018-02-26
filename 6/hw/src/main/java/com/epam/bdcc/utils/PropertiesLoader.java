@@ -1,7 +1,6 @@
 package com.epam.bdcc.utils;
 
 import com.epam.bdcc.kafka.MonitoringRecordPartitioner;
-import com.epam.bdcc.serde.KafkaJsonMonitoringRecordSerDe;
 import com.epam.bdcc.serde.KafkaKryoMonitoringRecordSerDe;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.apache.kafka.common.serialization.StringSerializer;

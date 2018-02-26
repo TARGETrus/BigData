@@ -1,11 +1,9 @@
 package com.epam.bdcc.spark;
 
 import com.epam.bdcc.htm.MonitoringRecord;
-import com.epam.bdcc.kafka.KafkaHelper;
 import com.epam.bdcc.serde.KafkaJsonMonitoringRecordSerDe;
 import com.google.common.io.Files;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
-import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.apache.spark.streaming.Duration;
 import org.apache.spark.streaming.api.java.JavaInputDStream;
@@ -45,12 +43,13 @@ public class AnomalyDetectorTest {
         outputFolder.deleteOnExit();
     }
 
-    @Ignore
+    // Useless. Mocks won't provide desired behaviour, embedded kafka/zk or integration tests needed.
+    // No stable embedded kafka/zk found for java API.
     @Test
     public void testRun() {
 
         Collection<String> topics = Arrays.asList(TOPIC_ONE);
-        // Map<String, Object> topicOneData = createTopicAndSendData(TOPIC_ONE);
+        createTopicAndSendData(TOPIC_ONE);
 
         Random random = new Random();
 
@@ -70,16 +69,14 @@ public class AnomalyDetectorTest {
                         ConsumerStrategies.<String, MonitoringRecord>Subscribe(topics, kafkaParams)
                 );
 
-        AnomalyDetector.processData(dStream, TOPIC_ONE);
+        // AnomalyDetector.processData(dStream, TOPIC_ONE);
 
     }
 
     private void createTopicAndSendData(String topic) {
-        MonitoringRecord rec = new MonitoringRecord();
-        ProducerRecord<String, MonitoringRecord> record =
-                new ProducerRecord<>(topic, KafkaHelper.getKey(rec), rec);
+        String[] messages = {"{stateCode:10,countyCode:001,siteNum:0002,parameterCode:44201,poc:1,latitude:38.986672,longitude:-75.5568,datum:WGS84,parameterName:Ozone,dateLocal:2014-01-07,timeLocal:00:00,dateGMT:2014-01-07,timeGMT:05:00,sampleMeasurement:0.039,unitsOfMeasure:Parts per million,mdl:0.005,uncertainty:,qualifier:,methodType:FEM,methodCode:047,methodName:INSTRUMENTAL - ULTRA VIOLET,stateName:Delaware,countyName:Kent,dateOfLastChange:2014-02-12,prediction:0.0,error:0.0,anomaly:0.0,predictionNext:0.0}"};
         kafkaTestUtils.createTopic(topic);
-        // kafkaTestUtils.sendMessages(topic, new HashMap<String, Object>());
+        kafkaTestUtils.sendMessages(topic, messages);
     }
 
     @After
