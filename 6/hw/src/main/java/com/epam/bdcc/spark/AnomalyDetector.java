@@ -61,7 +61,9 @@ public class AnomalyDetector implements GlobalConstants {
                     .set(SPARK_KRYO_REGISTRATOR_REQUIRED_CONFIG, sparkKryoRegRequired)
                     .set(SPARK_BACKPRESSURE_CONFIG, sparkBackPressure)
                     .set(SPARK_BACKPRESSURE_INITIAL_RATE_CONFIG, sparkBackInitialRate)
-                    .set(SPARK_KAFKA_MAX_RATE_PER_PARTITION_CONFIG, sparkKafkaMaxRatePP);
+                    .set(SPARK_KAFKA_MAX_RATE_PER_PARTITION_CONFIG, sparkKafkaMaxRatePP)
+                    .set("spark.executor.memory", "2g")
+                    .set("spark.executor.extraJavaOptions", "-XX:+UseConcMarkSweepGC");
             /*JavaStreamingContext jSteamingCtx = JavaStreamingContext.getOrCreate(
                     checkpointDir,
                     () -> new JavaStreamingContext(conf, batchDuration)
@@ -102,7 +104,7 @@ public class AnomalyDetector implements GlobalConstants {
                                    String topicToWriteTo, Duration windowDuration) {
 
         pairKafkaStream
-                .window(windowDuration)
+                // .window(windowDuration) using window leads to shuffle, records order will be broken.
                 .mapWithState(StateSpec.function(mappingFunc))
                 .foreachRDD(rdd ->
                     rdd.foreachPartition(rddPartition -> {
@@ -112,6 +114,7 @@ public class AnomalyDetector implements GlobalConstants {
                                     new ProducerRecord<>(topicToWriteTo, KafkaHelper.getKey(rec), rec);
                             producer.send(record);
                         });
+                        producer.flush();
                         producer.close();
                     })
                 );
